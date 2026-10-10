@@ -1,0 +1,223 @@
+# Telugu Market Pulse (తెలుగు మార్కెట్ పల్స్) - Stock Market News Sources
+#
+# Each [[source]] is one verified, active financial feed or API.
+# Fields:
+#   id         stable snake_case id
+#   name       display name
+#   url        RSS/Atom feed URL
+#   homepage   source homepage
+#   category   indian_markets | stocks_in_news | global_markets | fii_dii | commodities_forex | earnings | ipo | economy
+#   weight     1-5 (5 = official exchange/regulatory announcement, major market impact)
+#   include / exclude   optional regexes on titles
+#   max_age_days        ignore entries older than this (default 14)
+#   enabled    set false to mute a source without deleting it
+
+# ---------------------------------------------------------------- Indian Market Desk
+[[source]]
+id = "et_markets"
+name = "Economic Times Markets"
+url = "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms"
+homepage = "https://economictimes.indiatimes.com/markets"
+category = "indian_markets"
+weight = 5
+
+[[source]]
+id = "et_stocks"
+name = "Economic Times Stocks in News"
+url = "https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms"
+homepage = "https://economictimes.indiatimes.com/markets/stocks"
+category = "stocks_in_news"
+weight = 5
+
+[[source]]
+id = "et_ipos"
+name = "Economic Times IPO News"
+url = "https://economictimes.indiatimes.com/markets/ipos/fpos/rssfeeds/1977021501.cms"
+homepage = "https://economictimes.indiatimes.com/markets/ipos"
+category = "ipo"
+weight = 4
+
+[[source]]
+id = "et_corporate"
+name = "Economic Times Corporate Announcements"
+url = "https://economictimes.indiatimes.com/news/company/corporate-trends/rssfeeds/2143429.cms"
+homepage = "https://economictimes.indiatimes.com/news/company"
+category = "earnings"
+weight = 4
+
+[[source]]
+id = "mint_markets"
+name = "LiveMint Markets"
+url = "https://www.livemint.com/rss/markets"
+homepage = "https://www.livemint.com/market"
+category = "indian_markets"
+weight = 5
+
+[[source]]
+id = "mint_companies"
+name = "LiveMint Companies & Earnings"
+url = "https://www.livemint.com/rss/companies"
+homepage = "https://www.livemint.com/companies"
+category = "stocks_in_news"
+weight = 4
+
+[[source]]
+id = "bs_markets"
+name = "Business Standard Markets"
+url = "https://www.business-standard.com/rss/markets-106.rss"
+homepage = "https://www.business-standard.com/markets"
+category = "indian_markets"
+weight = 4
+
+[[source]]
+id = "bs_finance"
+name = "Business Standard Banking & Finance"
+url = "https://www.business-standard.com/rss/finance-103.rss"
+homepage = "https://www.business-standard.com/finance"
+category = "economy"
+weight = 4
+
+[[source]]
+id = "mc_top"
+name = "Moneycontrol Markets"
+url = "https://www.moneycontrol.com/rss/MCtopnews.xml"
+homepage = "https://www.moneycontrol.com/"
+category = "indian_markets"
+weight = 4
+
+[[source]]
+id = "mc_market"
+name = "Moneycontrol Market Reports"
+url = "https://www.moneycontrol.com/rss/marketreports.xml"
+homepage = "https://www.moneycontrol.com/news/business/markets/"
+category = "indian_markets"
+weight = 4
+
+[[source]]
+id = "mc_business"
+name = "Moneycontrol Business News"
+url = "https://www.moneycontrol.com/rss/business.xml"
+homepage = "https://www.moneycontrol.com/news/business/"
+category = "stocks_in_news"
+weight = 3
+
+[[source]]
+id = "mc_results"
+name = "Moneycontrol Results & Earnings"
+url = "https://www.moneycontrol.com/rss/results.xml"
+homepage = "https://www.moneycontrol.com/financials/results/"
+category = "earnings"
+weight = 4
+
+[[source]]
+id = "rbi_press"
+name = "Reserve Bank of India (RBI)"
+url = "https://rbi.org.in/pressreleases_rss.xml"
+homepage = "https://rbi.org.in"
+category = "economy"
+weight = 5
+
+[[source]]
+id = "sebi_press"
+name = "SEBI Official Orders & Circulars"
+url = "https://www.sebi.gov.in/sebirss.xml"
+homepage = "https://www.sebi.gov.in"
+category = "economy"
+weight = 5
+
+[[source]]
+id = "ndtv_profit"
+name = "NDTV Profit"
+url = "https://feeds.feedburner.com/ndtvprofit-latest"
+homepage = "https://www.ndtvprofit.com"
+category = "indian_markets"
+weight = 3
+
+# ---------------------------------------------------------------- Global Markets Desk
+[[source]]
+id = "mw_top"
+name = "MarketWatch Top Stories"
+url = "https://feeds.content.dowjones.io/public/rss/mw_topstories"
+homepage = "https://www.marketwatch.com"
+category = "global_markets"
+weight = 4
+
+[[source]]
+id = "mw_realtime"
+name = "MarketWatch Realtime Headlines"
+url = "https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines"
+homepage = "https://www.marketwatch.com/latest-news"
+category = "global_markets"
+weight = 4
+
+[[source]]
+id = "wsj_markets"
+name = "Wall Street Journal Markets"
+url = "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+homepage = "https://www.wsj.com/market-data"
+category = "global_markets"
+weight = 4
+
+[[source]]
+id = "cnbc_markets"
+name = "CNBC US & Global Markets"
+url = "https://www.cnbc.com/id/10000664/device/rss/rss.html"
+homepage = "https://www.cnbc.com/markets/"
+category = "global_markets"
+weight = 4
+
+[[source]]
+id = "cnbc_world"
+name = "CNBC World Business & Trade"
+url = "https://www.cnbc.com/id/100727362/device/rss/rss.html"
+homepage = "https://www.cnbc.com/world/"
+category = "global_markets"
+weight = 3
+
+[[source]]
+id = "cnbc_economy"
+name = "CNBC Economy & Central Banks"
+url = "https://www.cnbc.com/id/20910258/device/rss/rss.html"
+homepage = "https://www.cnbc.com/economy/"
+category = "economy"
+weight = 4
+
+[[source]]
+id = "fed_monetary"
+name = "US Federal Reserve Monetary Policy"
+url = "https://www.federalreserve.gov/feeds/press_monetary.xml"
+homepage = "https://www.federalreserve.gov/monetarypolicy.htm"
+category = "economy"
+weight = 5
+
+[[source]]
+id = "fed_press"
+name = "US Federal Reserve Press Releases"
+url = "https://www.federalreserve.gov/feeds/press_all.xml"
+homepage = "https://www.federalreserve.gov/newsevents/pressreleases.htm"
+category = "economy"
+weight = 4
+
+[[source]]
+id = "sec_press"
+name = "US SEC Press Releases"
+url = "https://www.sec.gov/news/pressreleases.rss"
+homepage = "https://www.sec.gov/news/pressreleases"
+category = "economy"
+weight = 4
+
+[[source]]
+id = "bea_news"
+name = "US Bureau of Economic Analysis (GDP/PCE)"
+url = "https://www.bea.gov/rss/rss.xml"
+homepage = "https://www.bea.gov/news"
+category = "economy"
+weight = 4
+
+[[source]]
+id = "investing_markets"
+name = "Investing.com Stock Markets"
+url = "https://www.investing.com/rss/news_25.rss"
+homepage = "https://www.investing.com/news/stock-market-news"
+category = "global_markets"
+weight = 3

@@ -1,0 +1,13 @@
+{
+  "name": "తెలుగు మార్కెట్ పల్స్ | Telugu Market Pulse",
+  "short_name": "మార్కెట్ పల్స్",
+  "description": "భారతీయ మరియు ప్రపంచ స్టాక్ మార్కెట్ వార్తలు, నివేదికలు మరియు ప్రభావ విశ్లేషణ పూర్తిగా తెలుగులో.",
+  "start_url": "./#/today",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#15120e",
+  "theme_color": "#e2401b",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

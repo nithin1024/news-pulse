@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="te" data-palette="broadsheet" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>తెలుగు మార్కెట్ పల్స్ | Telugu Market Pulse</title>
+  <meta name="description" content="భారతీయ మరియు ప్రపంచ స్టాక్ మార్కెట్ వార్తలు, NIFTY 50, SENSEX, Stocks in News, FII/DII డేటా, కమోడిటీలు, IPOలు మరియు మార్కెట్ ప్రభావ విశ్లేషణ పూర్తిగా తెలుగులో.">
+  <meta name="theme-color" id="theme-color" content="#f4efe6">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..600&family=Schibsted+Grotesk:wght@400..700&display=swap">
+  <link rel="stylesheet" href="palettes.css">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function () {
+      var d = document.documentElement, p, t;
+      var P = ["broadsheet", "salmon", "riso", "cobalt", "phosphor", "nocturne"];
+      try { p = localStorage.getItem("pulse.palette"); t = localStorage.getItem("pulse.theme"); } catch (e) {}
+      var q = /[?&]palette=([a-z]+)/.exec(location.search);
+      if (q) p = q[1];
+      if (P.indexOf(p) < 0) p = "broadsheet";
+      if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      d.setAttribute("data-palette", p);
+      d.setAttribute("data-theme", t);
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#view">వార్తలకు వెళ్ళండి</a>
+
+  <div class="ticker" aria-label="తాజా మార్కెట్ హెడ్లైన్స్">
+    <span class="ticker-label"><i class="beat" aria-hidden="true"></i>తాజా మార్కెట్</span>
+    <div class="ticker-window"><div class="ticker-track" id="ticker"></div></div>
+  </div>
+
+  <header class="masthead">
+    <div class="mast-meta">
+      <span id="dateline"></span>
+      <span id="edition" class="edition"></span>
+    </div>
+    <a class="wordmark" href="#/today" aria-label="తెలుగు మార్కెట్ పల్స్ — ముఖ్యాంశాలు">
+      <span>తెలుగు</span>
+      <span id="mast-pulse" class="pulse-slot"></span>
+      <span>మార్కెట్ పల్స్</span>
+    </a>
+    <p class="motto">భారతీయ మరియు ప్రపంచ స్టాక్ మార్కెట్ సమగ్ర విశ్లేషణ · ప్రతి రెండు గంటలకు తాజా నవీకరణ</p>
+  </header>
+
+  <nav class="sections" id="nav" aria-label="విభాగాలు">
+    <a class="mini-mark" href="#/today" aria-hidden="true" tabindex="-1">మార్కెట్&nbsp;పల్స్</a>
+    <div class="section-links">
+      <a href="#/today" data-route="today">ఈరోజు వార్తలు</a>
+      <a href="#/indian_markets" data-route="indian_markets">భారత మార్కెట్</a>
+      <a href="#/stocks_in_news" data-route="stocks_in_news">Stocks in News</a>
+      <a href="#/global_markets" data-route="global_markets">ప్రపంచ మార్కెట్</a>
+      <a href="#/fii_dii" data-route="fii_dii">FII / DII</a>
+      <a href="#/commodities" data-route="commodities">కమోడిటీలు &amp; బాండ్లు</a>
+      <a href="#/earnings" data-route="earnings">ఫలితాలు &amp; చర్యలు</a>
+      <a href="#/ipo" data-route="ipo">IPO వార్తలు</a>
+      <a href="#/calendar" data-route="calendar">ఆర్థిక క్యాలెండర్</a>
+      <a href="#/table" data-route="table">వార్తల పట్టిక</a>
+      <a href="#/feed" data-route="feed">అన్ని వార్తలు</a>
+      <a href="#/guide" data-route="guide">మార్కెట్ గైడ్</a>
+      <a href="#/briefs" data-route="briefs">సమీక్షలు</a>
+      <a href="#/saved" data-route="saved">సేవ్ చేసినవి<sup id="saved-count"></sup></a>
+      <a href="#/sources" data-route="sources">మూలాలు</a>
+    </div>
+    <form class="search" role="search" id="search-form">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.6-4.6"/></svg>
+      <input id="search" type="search" placeholder="వార్తలు, కంపెనీ లేదా Ticker శోధించండి..." autocomplete="off" aria-label="వార్తలను శోధించండి">
+      <kbd aria-hidden="true">/</kbd>
+    </form>
+    <div class="palette-picker">
+      <button class="palette-btn" id="palette-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="palette-menu" title="రంగుల ఎంపిక (P)">
+        <span class="swatch" aria-hidden="true"><i></i><i></i><i></i></span><span class="sr">రంగుల ఎంపిక</span>
+      </button>
+      <div class="palette-menu" id="palette-menu" role="menu" aria-label="రంగుల ఎంపిక" hidden></div>
+    </div>
+    <button class="theme-btn" id="theme-toggle" type="button" title="రాత్రి / పగటి ఎడిషన్ మార్చండి">
+      <span class="sun" aria-hidden="true">☀</span><span class="moon" aria-hidden="true">☾</span>
+      <span class="sr">రాత్రి / పగటి ఎడిషన్</span>
+    </button>
+  </nav>
+
+  <main id="view" tabindex="-1">
+    <div class="loading"><span class="beat"></span> వార్తలను సిద్ధం చేస్తున్నాము…</div>
+  </main>
+
+  <footer class="colophon">
+    <span>తెలుగు మార్కెట్ పల్స్ — స్టాక్ మార్కెట్ పరిశోధన మరియు విశ్లేషణ కోసం రూపొందించబడింది. ఇది కేవలం సమాచార ప్రయోజనాల కోసం మాత్రమే; ట్రేడింగ్ లేదా ఆర్థిక సలహా కాదు.</span>
+    <span id="colophon-run"></span>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
