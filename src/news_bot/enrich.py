@@ -10,11 +10,38 @@ import json
 import logging
 import re
 from datetime import timedelta
+from urllib.parse import quote
 
 from news_bot.llm import GroqClient, LLMUnavailableError
 from news_bot.textutil import parse_iso, utcnow
 
 log = logging.getLogger("news-bot.enrich")
+
+
+def _translate_to_telugu(text: str) -> str:
+    """Translate English text to Telugu using Google Translate (free, no API key).
+    Falls back to the original text on any error."""
+    if not text or not text.strip():
+        return text
+    # Skip if already contains Telugu characters
+    if re.search(r'[\u0C00-\u0C7F]', text):
+        return text
+    try:
+        import urllib.request
+        # Google Translate unofficial API endpoint (free, no key needed)
+        url = (
+            "https://translate.googleapis.com/translate_a/single"
+            f"?client=gtx&sl=en&tl=te&dt=t&q={quote(text[:500])}"
+        )
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            # Response format: [[["translated text","source text",...],...],...]
+            translated = "".join(part[0] for part in data[0] if part[0])
+            return translated if translated.strip() else text
+    except Exception as e:
+        log.debug("Translation failed for '%s...': %s", text[:40], e)
+        return text
 
 CATEGORIES = {
     "indian_markets": "భారతీయ మార్కెట్లు",
@@ -247,8 +274,9 @@ def fallback_enrichment(item: dict) -> dict:
         importance = max(importance, 4)
 
     # Basic Telugu phrasing based on sentiment and title
-    title_te = title
-    summary_te = excerpt[:240] if excerpt else title
+    # Translate title and summary to Telugu using free Google Translate
+    title_te = _translate_to_telugu(title)
+    summary_te = _translate_to_telugu(excerpt[:240]) if excerpt else title_te
     why_te = "ఈ వార్త సంబంధిత కంపెనీ షేర్లు మరియు రంగాల సెంటిమెంట్పై తక్షణ ప్రభావం చూపే అవకాశం ఉంది."
 
     impact_desc = {
