@@ -805,7 +805,9 @@ VIEWS.indian_markets = async (params) =>
 
 VIEWS.stocks_in_news = async (params) => {
   const week = await loadRange(Number(params.range) || 7);
-  return head("Stocks in News (కీలక స్టాక్స్ పట్టిక)", "ఆర్డర్లు, ఫలితాలు, ఒప్పందాలు, కార్పొరేట్ చర్యలతో వార్తల్లో ఉన్న స్టాక్స్ మరియు ఇంట్రాడే పరిశీలన.") +
+  const feedHtml = await genericFeedView(params, { filter: (s) => s.category === "stocks_in_news" || (s.affected_stocks?.length > 0), hideCategories: true });
+  return head("Stocks in News", "కీలక వార్తలు కలిగిన కంపెనీలు, షేర్ల కదలికలు, కార్పొరేట్ ప్రకటనలు మరియు స్వల్పకాలిక/దీర్ఘకాలిక ప్రభావం.") +
+    feedHtml +
     renderStocksInNewsFinalTable(week);
 };
 
