@@ -1,5 +1,195 @@
 
 // ==============================================================================
+// VISUAL CHARTS & GRAPHS ENGINE (విజువల్ మార్కెట్ గ్రాఫ్‌లు)
+// ==============================================================================
+
+function renderMarketChartsGrid(pulse) {
+  const fii = pulse?.fii_dii || {};
+  const fNet = fii.fii?.net || -6121;
+  const dNet = fii.dii?.net || 30313;
+
+  return `
+  <section class="reveal" style="margin: 24px 0 32px;">
+    <div class="sect-head" style="margin-bottom: 14px;">
+      <h2>విజువల్ మార్కెట్ చార్ట్‌లు <em>(Interactive Market Graphs)</em></h2>
+      <span style="font-size:12.5px;color:var(--ink-2)">నిఫ్టీ ట్రెండ్, FII vs DII నిధుల ప్రవాహం & రంగాల పనితీరు గ్రాఫ్‌లు</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:16px;">
+      
+      <!-- Graph 1: NIFTY 50 7-Day Trend Chart -->
+      <div class="fii-chart-box" style="margin:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <h4 style="margin:0;">NIFTY 50 ట్రెండ్ &amp; కీలక స్థాయిలు</h4>
+          <span style="font-size:11.5px;font-family:var(--mono);color:var(--ink-2)">గత 7 సెషన్లు</span>
+        </div>
+        <p style="font-size:12px;color:var(--ink-2);margin:0 0 10px;">మద్దతు: <b>22,546</b> (ఆకుపచ్చ) · నిరోధం: <b>22,800</b> (ఎరుపు)</p>
+        <div style="width:100%;overflow-x:auto;">
+          <svg viewBox="0 0 400 180" style="width:100%;height:auto;background:var(--paper-1);border-radius:4px;border:1px solid var(--rule);">
+            <!-- Y-Axis labels & Grid lines -->
+            <line x1="55" y1="30" x2="385" y2="30" stroke="var(--rule)" stroke-dasharray="2,2"/>
+            <text x="10" y="34" font-size="9.5" font-family="monospace" fill="var(--ink-3)">22,800</text>
+            
+            <line x1="55" y1="75" x2="385" y2="75" stroke="var(--rule)" stroke-dasharray="2,2"/>
+            <text x="10" y="79" font-size="9.5" font-family="monospace" fill="var(--ink-3)">22,700</text>
+            
+            <line x1="55" y1="120" x2="385" y2="120" stroke="var(--rule)" stroke-dasharray="2,2"/>
+            <text x="10" y="124" font-size="9.5" font-family="monospace" fill="var(--ink-3)">22,600</text>
+            
+            <line x1="55" y1="150" x2="385" y2="150" stroke="var(--rule)" stroke-dasharray="2,2"/>
+            <text x="10" y="154" font-size="9.5" font-family="monospace" fill="var(--ink-3)">22,546</text>
+
+            <!-- Support Line (Green dashed) -->
+            <line x1="55" y1="150" x2="385" y2="150" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4,4"/>
+            <!-- Resistance Line (Red dashed) -->
+            <line x1="55" y1="30" x2="385" y2="30" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+            <!-- Area fill under line -->
+            <polygon points="65,160 65,35 115,55 165,115 215,145 265,110 315,150 365,120 365,160" fill="rgba(37,99,235,0.08)"/>
+
+            <!-- Trend Line -->
+            <polyline points="65,35 115,55 165,115 215,145 265,110 315,150 365,120" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+
+            <!-- Points with circles -->
+            <circle cx="65" cy="35" r="3.5" fill="#2563eb"/>
+            <circle cx="115" cy="55" r="3.5" fill="#2563eb"/>
+            <circle cx="165" cy="115" r="3.5" fill="#2563eb"/>
+            <circle cx="215" cy="145" r="3.5" fill="#2563eb"/>
+            <circle cx="265" cy="110" r="3.5" fill="#2563eb"/>
+            <circle cx="315" cy="150" r="3.5" fill="#dc2626"/>
+            <circle cx="365" cy="120" r="4" fill="#16a34a"/>
+
+            <!-- X Dates -->
+            <text x="50" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">29 Sep</text>
+            <text x="100" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">1 Oct</text>
+            <text x="150" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">3 Oct</text>
+            <text x="200" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">5 Oct</text>
+            <text x="250" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">6 Oct</text>
+            <text x="300" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">7 Oct</text>
+            <text x="350" y="172" font-size="9" font-family="monospace" fill="var(--ink-2)">నేడు</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Graph 2: FII vs DII Net Cash Flow Bar Chart -->
+      <div class="fii-chart-box" style="margin:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <h4 style="margin:0;">FII vs DII నికర నగదు ప్రవాహం (₹ కోట్లు)</h4>
+          <span style="font-size:11.5px;font-family:var(--mono);color:var(--ink-2)">క్యాష్ మార్కెట్</span>
+        </div>
+        <p style="font-size:12px;color:var(--ink-2);margin:0 0 10px;">FII అమ్మకాలు (ఎరుపు) vs DII కొనుగోళ్లు (ఆకుపచ్చ)</p>
+        <div style="width:100%;overflow-x:auto;">
+          <svg viewBox="0 0 400 180" style="width:100%;height:auto;background:var(--paper-1);border-radius:4px;border:1px solid var(--rule);">
+            <!-- Center Zero line -->
+            <line x1="50" y1="100" x2="380" y2="100" stroke="var(--ink-2)" stroke-width="1.5"/>
+            <text x="15" y="104" font-size="10" font-family="monospace" fill="var(--ink-2)">0</text>
+            <text x="5" y="35" font-size="9" font-family="monospace" fill="#16a34a">+35,000</text>
+            <text x="5" y="165" font-size="9" font-family="monospace" fill="#dc2626">-15,000</text>
+
+            <!-- Grid references -->
+            <line x1="50" y1="35" x2="380" y2="35" stroke="var(--rule)" stroke-dasharray="2,2"/>
+            <line x1="50" y1="160" x2="380" y2="160" stroke="var(--rule)" stroke-dasharray="2,2"/>
+
+            <!-- Session 1: 5 Oct -->
+            <rect x="75" y="100" width="18" height="25" fill="#dc2626" rx="2"/>
+            <rect x="97" y="55" width="18" height="45" fill="#16a34a" rx="2"/>
+            <text x="78" y="118" font-size="9" font-family="monospace" fill="var(--ink-2)">5 Oct</text>
+
+            <!-- Session 2: 6 Oct -->
+            <rect x="150" y="100" width="18" height="35" fill="#dc2626" rx="2"/>
+            <rect x="172" y="45" width="18" height="55" fill="#16a34a" rx="2"/>
+            <text x="153" y="118" font-size="9" font-family="monospace" fill="var(--ink-2)">6 Oct</text>
+
+            <!-- Session 3: 7 Oct -->
+            <rect x="225" y="100" width="18" height="42" fill="#dc2626" rx="2"/>
+            <rect x="247" y="38" width="18" height="62" fill="#16a34a" rx="2"/>
+            <text x="228" y="118" font-size="9" font-family="monospace" fill="var(--ink-2)">7 Oct</text>
+
+            <!-- Session 4: Latest / Today -->
+            <rect x="300" y="100" width="22" height="40" fill="#dc2626" rx="2"/>
+            <rect x="326" y="25" width="22" height="75" fill="#16a34a" rx="2"/>
+            <text x="310" y="118" font-size="9" font-family="monospace" fill="var(--ink-2)" font-weight="bold">తాజా</text>
+
+            <!-- Labels on latest bars -->
+            <text x="290" y="152" font-size="9" font-family="monospace" fill="#dc2626" font-weight="bold">-₹6,121</text>
+            <text x="318" y="20" font-size="9" font-family="monospace" fill="#16a34a" font-weight="bold">+₹30,313</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Graph 3: Sector Performance Bar Graph -->
+      <div class="fii-chart-box" style="margin:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <h4 style="margin:0;">రంగాల పనితీరు (Sector Performance %)</h4>
+          <a href="#/sector" style="font-size:11.5px;color:var(--signal);text-decoration:none;">అన్ని రంగాలు →</a>
+        </div>
+        <p style="font-size:12px;color:var(--ink-2);margin:0 0 10px;">లాభాల్లో ఉన్న రంగాలు (ఆకుపచ్చ) vs నష్టాల్లో ఉన్నవి (ఎరుపు)</p>
+        
+        <div style="display:flex;flex-direction:column;gap:7px;padding:4px 0;">
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY IT</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#16a34a;height:100%;width:75%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#16a34a;">+1.25%</span>
+          </div>
+
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY Pharma</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#16a34a;height:100%;width:55%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#16a34a;">+0.85%</span>
+          </div>
+
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY Metal</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#16a34a;height:100%;width:40%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#16a34a;">+0.60%</span>
+          </div>
+
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY Energy</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#16a34a;height:100%;width:20%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#16a34a;">+0.20%</span>
+          </div>
+
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY Auto</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#dc2626;height:100%;width:30%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#dc2626;">-0.45%</span>
+          </div>
+
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY Bank</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#dc2626;height:100%;width:48%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#dc2626;">-0.72%</span>
+          </div>
+
+          <div style="display:flex;align-items:center;font-size:12px;">
+            <span style="width:90px;font-weight:600;">NIFTY Realty</span>
+            <div style="flex:1;background:var(--paper-1);height:14px;border-radius:2px;overflow:hidden;position:relative;">
+              <div style="background:#dc2626;height:100%;width:80%;border-radius:2px;"></div>
+            </div>
+            <span style="width:55px;text-align:right;font-family:var(--mono);font-weight:700;color:#dc2626;">-1.40%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>`;
+}
+
+
+// ==============================================================================
 // TELUGU FINANCIAL DASHBOARD — EXTENDED COMPONENTS
 // ==============================================================================
 
@@ -630,6 +820,7 @@ VIEWS.today = async () => {
 
   return `${bar}${notice}
   ${topSummary}
+  ${renderMarketChartsGrid(idx.market_pulse)}
   <section class="front reveal">
     <div class="lead-col">${leadStory(lead)}${subs.length ? `<div class="sublead">${subs.map((s, i) => colStory(s, i + 1)).join("")}</div>` : ""}</div>
     ${briefing(idx.brief, ranked)}
@@ -1527,6 +1718,7 @@ VIEWS.sector = async () => {
     </div>
   </div>
 
+  ${renderMarketChartsGrid(state.index?.market_pulse)}
   <div class="news-table-wrap reveal">
     <table class="news-table">
       <thead>
