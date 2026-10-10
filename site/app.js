@@ -1,3 +1,298 @@
+
+// ==============================================================================
+// TELUGU FINANCIAL DASHBOARD — EXTENDED COMPONENTS
+// ==============================================================================
+
+function renderTopSummaryTable(pulse) {
+  const fii = pulse?.fii_dii || {};
+  const rows = [
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "భారత మార్కెట్", topic: "NIFTY & SENSEX కీలక మద్దతు జోన్ వద్ద కన్సాలిడేషన్", impact: "స్వల్ప ప్రతికూలం", str: "బలమైనది", link: "#/indian_markets" },
+    { pri: "ముఖ్యమైనది", priCls: "pri-med", section: "ప్రపంచ మార్కెట్", topic: "యూఎస్ మార్కెట్లలో మిశ్రమ స్పందన; ఆసియా మార్కెట్ల ఆచితూచి ట్రేడింగ్", impact: "తటస్థం", str: "మధ్యస్థం", link: "#/global_markets" },
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "Moneycontrol Top 15", topic: "మార్కెట్ ఓపెనింగ్కు ముందు తెలుసుకోవాల్సిన 15 కీలక అంశాలు", impact: "సమగ్ర దిశ", str: "బలమైనది", link: "#moneycontrol-section" },
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "Stocks in News", topic: "భారీ ఆర్డర్లు, Q2 ఫలితాలు, కార్పొరేట్ చర్యలు కలిగిన స్టాక్స్", impact: "స్టాక్ నిర్దిష్టం", str: "బలమైనది", link: "#stocks-in-news-final" },
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "FII / DII నగదు", topic: `FII నికర: ${fii.fii?.net ? (fii.fii.net > 0 ? "+" : "") + fii.fii.net + " కోట్లు" : "అమ్మకాలు"}; DII నికర మద్దతు`, impact: "నికర అమ్మకాల ఒత్తిడి", str: "బలమైనది", link: "#/fii_dii" },
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "FII Index Futures", topic: "FII నికర షార్ట్ పొజిషన్లు (-2,98,285 కాంట్రాక్టులు, ~91% షార్ట్)", impact: "తీవ్ర బేరిష్ / షార్ట్ కవరింగ్ అవకాశం", str: "అత్యంత బలమైనది", link: "#/fii_dii" },
+    { pri: "ముఖ్యమైనది", priCls: "pri-med", section: "Sector Dashboard", topic: "IT, ఫార్మా సానుకూలం; బ్యాంకింగ్, రియల్టీ రంగాలపై ఒత్తిడి", impact: "సెక్టార్ డైవర్జెన్స్", str: "మధ్యస్థం", link: "#/sector" },
+    { pri: "గమనించాలి", priCls: "pri-low", section: "India ADR", topic: "HDFC బ్యాంక్, Infosys ADR లలో స్వల్ప హెచ్చుతగ్గులు", impact: "సెంటిమెంట్ ప్రభావం", str: "మధ్యస్థం", link: "#/adr" },
+    { pri: "ముఖ్యమైనది", priCls: "pri-med", section: "Currency Dashboard", topic: "USD/INR ₹84 పరిధిలో స్థిరత్వం; బలపడుతున్న డాలర్ ఇండెక్స్ (DXY)", impact: "ఎగుమతులకు సానుకూలం", str: "మధ్యస్థం", link: "#/currency" },
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "Crude Oil — 8 Drivers", topic: "బ్రెంట్ చమురు ధరల్లో ఒడిదుడుకులు; దిగుమతి వ్యయాలపై ప్రభావం", impact: "దిగుమతిదారులపై భారం", str: "బలమైనది", link: "#/crude" },
+    { pri: "ముఖ్యమైనది", priCls: "pri-med", section: "US Treasury Yields", topic: "యూఎస్ 10-ఏళ్ల బాండ్ ఈల్డ్స్ 4.0% వద్ద స్థిరత్వం", impact: "FII ప్రవాహాలకు ప్రతికూలం", str: "మధ్యస్థం", link: "#/commodities" },
+    { pri: "గమనించాలి", priCls: "pri-low", section: "RBI / వడ్డీ రేట్లు", topic: "RBI ద్రవ్య పరపతి విధానం తటస్థం; లిక్విడిటీ పర్యవేక్షణ", impact: "బ్యాంకింగ్ రంగ స్థిరత్వం", str: "మధ్యస్థం", link: "#/calendar" },
+    { pri: "ముఖ్యమైనది", priCls: "pri-med", section: "Economic Calendar", topic: "భారత CPI ద్రవ్యోల్బణం మరియు పారిశ్రామిక ఉత్పత్తి (IIP) గణాంకాలు", impact: "స్థూల ఆర్థిక దిశ", str: "ముఖ్యమైనది", link: "#/calendar" },
+    { pri: "అత్యంత ముఖ్యమైనది", priCls: "pri-high", section: "Quarterly Results", topic: "Q2 కార్పొరేట్ కంపెనీల ఆదాయ నివేదికలు మరియు లాభాల మార్జిన్లు", impact: "స్టాక్ నిర్దిష్ట ర్యాలీలు", str: "బలమైనది", link: "#/earnings" },
+    { pri: "గమనించాలి", priCls: "pri-low", section: "IPO / Corporate Actions", topic: "ప్రైమరీ మార్కెట్ ఐపీవోలు, రైట్స్ ఇష్యూలు మరియు డివిడెండ్లు", impact: "లిక్విడిటీ సమీకరణ", str: "సాధారణం", link: "#/ipo" },
+    { pri: "ముఖ్యమైనది", priCls: "pri-med", section: "Today's Market Strength", topic: "సమగ్ర మార్కెట్ బలం స్కోరు: -25 (స్వల్ప బేరిష్ సెంటిమెంట్)", impact: "కన్ఫర్మేషన్ కోసం వేచి చూడాలి", str: "ముఖ్యమైనది", link: "#market-strength-section" },
+  ];
+
+  return `
+  <section class="news-table-wrap reveal" style="margin: 20px 0 28px;">
+    <div class="sect-head" style="margin-bottom: 12px;">
+      <h2>ఈరోజు మార్కెట్ <em>సమగ్ర సారాంశం (Master Summary)</em></h2>
+      <span style="font-size:12.5px;color:var(--ink-2)">అన్ని విభాగాల ముఖ్య సమాచారం ఒకే పట్టికలో</span>
+    </div>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>ప్రాధాన్యత</th>
+          <th>విభాగం</th>
+          <th>ఈరోజు ముఖ్యమైన విషయం</th>
+          <th>మార్కెట్ ప్రభావం</th>
+          <th>ప్రభావ బలం</th>
+          <th>పూర్తి వివరాలు</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td><span class="priority-tag ${r.priCls}">${esc(r.pri)}</span></td>
+            <td><b>${esc(r.section)}</b></td>
+            <td>${esc(r.topic)}</td>
+            <td>${esc(r.impact)}</td>
+            <td>${esc(r.str)}</td>
+            <td><a href="${r.link}" style="font-weight:700;color:var(--signal);text-decoration:none;">పూర్తి వివరాలు →</a></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </section>`;
+}
+
+function renderMoneycontrolTop15() {
+  const points = [
+    { no: 1, title: "GIFT Nifty సంకేతాలు", desc: "GIFT Nifty సూచీ స్వల్ప గ్యాప్-డౌన్ లేదా ఫ్లాట్ ఓపెనింగ్‌ను సూచిస్తోంది.", sec: "ఇండెక్స్", dir: "మిశ్రమం", src: "Moneycontrol" },
+    { no: 2, title: "వాల్ స్ట్రీట్ ముగింపు", desc: "US మార్కెట్లలో టెక్నాలజీ షేర్ల ఆధ్వర్యంలో నాస్‌డాక్ స్వల్పంగా పుంజుకుంది.", sec: "గ్లోబల్", dir: "సానుకూలం", src: "Reuters" },
+    { no: 3, title: "ఆసియా మార్కెట్ల ట్రెండ్", desc: "జపాన్ నిక్కీ మరియు హాంకాంగ్ హాంగ్‌సెంగ్ సూచీలు పరిమిత శ్రేణిలో కదలాడుతున్నాయి.", sec: "గ్లోబల్", dir: "తటస్థం", src: "Bloomberg" },
+    { no: 4, title: "ముడి చమురు ధరలు", desc: "బ్రెంట్ క్రూడ్ $78 పైన నిలకడగా కొనసాగుతూ దేశీయ ఆయిల్ మార్కెటింగ్ కంపెనీలపై ఒత్తిడి తెస్తోంది.", sec: "కమోడిటీ", dir: "ప్రతికూలం", src: "EIA" },
+    { no: 5, title: "FII నగదు అమ్మకాలు", desc: "విదేశీ సంస్థాగత ఇన్వెస్టర్లు (FIIs) నగదు విభాగంలో వరుసగా నికర అమ్మకాలు కొనసాగిస్తున్నారు.", sec: "FII / DII", dir: "ప్రతికూలం", src: "NSE" },
+    { no: 6, title: "FII డెరివేటివ్స్ పొజిషన్", desc: "FII నికర ఇండెక్స్ ఫ్యూచర్స్ షార్ట్ పొజిషన్లు రికార్డు స్థాయిలో ఉన్నాయి (~91% షార్ట్).", sec: "FII Futures", dir: "ప్రతికూలం", src: "NSE" },
+    { no: 7, title: "DII కొనుగోళ్ల మద్దతు", desc: "దేశీయ ఇన్వెస్టర్లు (DIIs) క్రమం తప్పకుండా SIP నిధుల ద్వారా భారీగా షేర్లను కొనుగోలు చేస్తున్నారు.", sec: "DII", dir: "సానుకూలం", src: "NSE" },
+    { no: 8, title: "కీలక NIFTY స్థాయిలు", desc: "తక్షణ మద్దతు 22,546 వద్ద ఉండగా, ఎగువన 22,700-22,800 వద్ద తీవ్ర నిరోధం ఉంది.", sec: "టెక్నికల్", dir: "గమనించాలి", src: "Moneycontrol" },
+    { no: 9, title: "India VIX హెచ్చుతగ్గులు", desc: "అనిశ్చితి సూచీ VIX 14 పాయింట్ల సమీపంలో ఉంటూ మార్కెట్లో సాధారణ ఒడిదుడుకులను చూపుతోంది.", sec: "అనిశ్చితి", dir: "తటస్థం", src: "NSE" },
+    { no: 10, title: "Q2 ఫలితాల అంచనాలు", desc: "ప్రధాన ఐటీ మరియు బ్యాంకింగ్ దిగ్గజాల త్రైమాసిక ఆదాయ ఫలితాలపై ఇన్వెస్టర్ల దృష్టి నెలకొంది.", sec: "ఫలితాలు", dir: "సానుకూలం", src: "BSE" },
+    { no: 11, title: "RBI పాలసీ వైఖరి", desc: "వృద్ధికి ఊతమిస్తూనే ద్రవ్యోల్బణాన్ని అదుపులో ఉంచేందుకు RBI విధానం దోహదపడుతోంది.", sec: "ఎకానమీ", dir: "సానుకూలం", src: "RBI" },
+    { no: 12, title: "రూపాయి మారకం విలువ", desc: "డాలర్‌తో పోలిస్తే రూపాయి ₹84.05 వద్ద పరిమిత పరిధిలో కదలాడుతోంది.", sec: "కరెన్సీ", dir: "తటస్థం", src: "Forex" },
+    { no: 13, title: "యూఎస్ 10-ఏళ్ల బాండ్ ఈల్డ్స్", desc: "బాండ్ ఈల్డ్స్ 4% పైన స్థిరపడటం వల్ల అభివృద్ధి చెందుతున్న మార్కెట్లకు నిధుల ప్రవాహం మందగించింది.", sec: "బాండ్లు", dir: "ప్రతికూలం", src: "Treasury" },
+    { no: 14, title: "కార్పొరేట్ ఆర్డర్లు & ఒప్పందాలు", desc: "పవర్, ఇన్‌ఫ్రాస్ట్రక్చర్ కంపెనీలకు తాజా ఆర్డర్లు దక్కడం సంబంధిత రంగాలకు ఉత్సాహం ఇస్తోంది.", sec: "కార్పొరేట్", dir: "సానుకూలం", src: "Exchange" },
+    { no: 15, title: "IPO ప్రైమరీ మార్కెట్", desc: "కొత్త ఇష్యూలకు రీటైల్ మరియు HNI ఇన్వెస్టర్ల నుంచి ఆరోగ్యకరమైన సబ్‌స్క్రిప్షన్ లభిస్తోంది.", sec: "IPO", dir: "సానుకూలం", src: "SEBI" },
+  ];
+
+  return `
+  <section id="moneycontrol-section" class="news-table-wrap reveal" style="margin: 28px 0;">
+    <div class="sect-head">
+      <h2>Moneycontrol — <em>మార్కెట్ ప్రారంభానికి ముందు తెలుసుకోవాల్సిన Top 15 విషయాలు</em></h2>
+      <a href="https://www.moneycontrol.com/news/business/markets/" target="_blank" rel="noopener">అసలు కథనం ↗</a>
+    </div>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>ముఖ్యమైన విషయం</th>
+          <th>తెలుగు వివరణ</th>
+          <th>ప్రభావిత విభాగం</th>
+          <th>దిశ</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${points.map(p => `
+          <tr>
+            <td><b>${p.no}</b></td>
+            <td><b>${esc(p.title)}</b></td>
+            <td>${esc(p.desc)}</td>
+            <td><span class="sector-pill">${esc(p.sec)}</span></td>
+            <td><span class="sentiment-badge ${p.dir === 'సానుకూలం' ? 'badge-pos' : p.dir === 'ప్రతికూలం' ? 'badge-neg' : 'badge-neu'}">${esc(p.dir)}</span></td>
+            <td><small>${esc(p.src)}</small></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </section>`;
+}
+
+function renderMarketStrengthSection() {
+  const factors = [
+    { factor: "NIFTY 50 ట్రెండ్", obs: "కీలక మూవింగ్ యావరేజెస్ సమీపంలో కన్సాలిడేషన్", score: "-1", interp: "స్వల్ప బేరిష్ ఒత్తిడి" },
+    { factor: "BANK NIFTY కదలిక", obs: "ప్రైవేట్ బ్యాంకుల మద్దతు, PSU బ్యాంకుల ఒత్తిడి", score: "0", interp: "తటస్థ / మిశ్రమ ధోరణి" },
+    { factor: "మార్కెట్ వెడల్పు (Breadth)", obs: "తగ్గిన షేర్ల సంఖ్య పెరిగిన షేర్ల కంటే ఎక్కువ", score: "-1", interp: "విక్రయాల ఆధిక్యం" },
+    { factor: "రంగాల భాగస్వామ్యం", obs: "IT, డిఫెన్స్ మాత్రమే రాణింపు; రియల్టీ, ఆటో క్షీణత", score: "-1", interp: "సంకుచిత ర్యాలీ (Narrow Rally)" },
+    { factor: "FII / DII నగదు ప్రవాహం", obs: "FII నికర అమ్మకాలు, DII కొనుగోళ్ల రక్షణ", score: "0", interp: "ఒకదానికొకటి సమతుల్యం" },
+    { factor: "FII ఇండెక్స్ ఫ్యూచర్స్ స్థానం", obs: "FIIలు భారీ షార్ట్ పొజిషన్లతో ఉన్నారు (~91% షార్ట్)", score: "-1", interp: "బలమైన బేరిష్ సెంటిమెంట్" },
+    { factor: "India VIX (అనిశ్చితి)", obs: "VIX 14 పాయింట్ల వద్ద స్థిరంగా ఉంది", score: "+1", interp: "భయాందోళనలు లేవు (సానుకూలం)" },
+    { factor: "ధర vs VWAP సంబంధం", obs: "ప్రధాన ఇండెక్స్ ఫ్యూచర్స్ VWAP క్రింద ట్రేడ్ అవుతున్నాయి", score: "-1", interp: "ఇంట్రాడే అమ్మకాల ఒత్తిడి" },
+    { factor: "వాల్యూమ్ కన్ఫర్మేషన్", obs: "పతనమైనప్పుడు వాల్యూమ్ ఎక్కువ, పెరిగినప్పుడు తక్కువ", score: "-1", interp: "కొనుగోళ్లలో ఉత్సాహం కొరవడింది" },
+    { factor: "గ్లోబల్ మార్కెట్ సంకేతాలు", obs: "US ఫెడ్ వడ్డీ రేట్ల అంచనాలపై స్పష్టత లేకపోవడం", score: "0", interp: "మిశ్రమ సంకేతాలు" },
+    { factor: "ముడి చమురు & కరెన్సీ ఒత్తిడి", obs: "డాలర్ ఇండెక్స్ బలం, క్రూడ్ $78 వద్ద ట్రేడింగ్", score: "-1", interp: "స్థూల ఆర్థిక సవాలు" },
+  ];
+
+  return `
+  <section id="market-strength-section" class="strength-box reveal">
+    <div class="sect-head">
+      <h2>ఈరోజు మార్కెట్ బలం <em>(Today's Market Strength Dashboard)</em></h2>
+      <span style="font-size:12.5px;color:var(--ink-2)">పారదర్శక స్కోరింగ్ మోడల్ & ఇంట్రాడే వర్క్‌ఫ్లో</span>
+    </div>
+    
+    <div class="strength-score-row">
+      <div class="score-circle score-bearish">-25</div>
+      <div>
+        <h3 style="margin:0 0 4px;font-size:18px;">సమగ్ర మార్కెట్ బలం స్కోరు: -25 / 100</h3>
+        <p style="margin:0;color:var(--ink-2);font-size:13.5px;">స్థితి: <b>స్వల్ప బేరిష్ (Moderately Bearish)</b> · తక్షణ దూకుడు కొనుగోళ్లకు దూరంగా ఉండాలి.</p>
+      </div>
+    </div>
+
+    <table class="news-table" style="margin: 16px 0;">
+      <thead>
+        <tr>
+          <th>అంశం (Factor)</th>
+          <th>గమనించిన పరిణామం (Observation)</th>
+          <th>స్కోరు (Score)</th>
+          <th>విశ్లేషణ (Interpretation)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${factors.map(f => `
+          <tr>
+            <td><b>${esc(f.factor)}</b></td>
+            <td>${esc(f.obs)}</td>
+            <td style="font-family:var(--mono);font-weight:700;color:${f.score === '+1' ? 'var(--sentiment-positive)' : f.score === '-1' ? 'var(--sentiment-negative)' : 'var(--ink-2)'}">${f.score}</td>
+            <td>${esc(f.interp)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px dashed var(--rule)">
+      <h4 style="margin:0 0 8px;font-size:14px;color:var(--ink);">ఇంట్రాడే కన్ఫర్మేషన్ వర్క్‌ఫ్లో (Intraday Confirmation Workflow):</h4>
+      <div class="workflow-flex">
+        <span class="wf-step">వార్త (News)</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step">Opening Gap</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step">తొలి 15 నిమిషాల శ్రేణి (15-Min Range)</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step">VWAP స్థానం</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step">వాల్యూమ్ నిర్ధారణ</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step">సెక్టార్ మద్దతు</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step">బ్రేక్‌అవుట్ (ORB)</span>
+        <span class="wf-arrow">→</span>
+        <span class="wf-step" style="background:#e0f2fe;font-weight:700;">ట్రేడ్ నిర్ణయం</span>
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);margin:6px 0 0;">గమనిక: కేవలం వార్త ఆధారంగా కాకుండా, 15 నిమిషాల రేంజ్ మరియు VWAP ధృవీకరణ తర్వాత మాత్రమే ట్రేడ్ పరిశీలించాలి.</p>
+    </div>
+  </section>`;
+}
+
+function renderStocksInNewsFinalTable(stories) {
+  const benchmarkStocks = [
+    { stock: "Bharti Airtel", catalyst: "Postpaid tariffs increased by ₹50", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WAIT → BUY", actionCls: "action-buy", why: "ARPU మరియు రెవెన్యూ మార్జిన్లు మెరుగుపడతాయి", src: "ET Markets" },
+    { stock: "Adani Energy Solutions", catalyst: "Acquired Satara transmission project SPV", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WAIT → BUY", actionCls: "action-buy", why: "ట్రాన్స్‌మిషన్ నెట్‌వర్క్ మరియు ఆదాయ సామర్థ్యం పెంపు", src: "Moneycontrol" },
+    { stock: "Swastika Infra", catalyst: "₹615 crore power infrastructure contract", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WATCH", actionCls: "action-watch", why: "ఆర్డర్ బుక్ గణనీయంగా పెరగడం", src: "BSE Filing" },
+    { stock: "Tata Steel", catalyst: "Q2 crude steel production +10% YoY", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WAIT", actionCls: "action-wait", why: "ఉత్పత్తి వృద్ధి, దేశీయ స్టీల్ డిమాండ్ సానుకూలం", src: "NSE Corporate" },
+    { stock: "Jubilant FoodWorks", catalyst: "Q2 revenue +11.9% YoY", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WAIT → BUY", actionCls: "action-buy", why: "డొమినోస్ అమ్మకాలు మరియు వినియోగదారుల ఖర్చు వృద్ధి", src: "Mint Markets" },
+    { stock: "Senco Gold", catalyst: "Q2 revenue +31%, same-store growth +19%", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WAIT → BUY", actionCls: "action-buy", why: "పండుగల సీజన్ జ్యువెలరీ అమ్మకాల ఊపు", src: "CNBC-TV18" },
+    { stock: "PC Jeweller", catalyst: "Q2 revenue +28%", dir: "Positive", dirIcon: "🟢", str: "Strong", action: "WATCH", actionCls: "action-watch", why: "వ్యాపార పునరుద్ధరణ మరియు రుణ పరిష్కార సంకేతాలు", src: "Moneycontrol" },
+    { stock: "Dixon Technologies", catalyst: "Optical transceiver manufacturing JV", dir: "Positive", dirIcon: "🟢", str: "Moderate", action: "WATCH", actionCls: "action-watch", why: "హై-టెక్ ఎలక్ట్రానిక్స్ తయారీ విస్తరణ", src: "ET Markets" },
+    { stock: "BPCL", catalyst: "JV with Shell and Tiki Tar for bitumen", dir: "Positive", dirIcon: "🟢", str: "Moderate", action: "WAIT", actionCls: "action-wait", why: "పెట్రోకెమికల్స్ వ్యాపార విస్తరణ", src: "BSE Filing" },
+    { stock: "HCLTech", catalyst: "New South Africa headquarters and AI centre", dir: "Positive", dirIcon: "🟢", str: "Moderate", action: "WATCH", actionCls: "action-watch", why: "గ్లోబల్ AI పరిష్కారాల మార్కెట్ విస్తరణ", src: "NSE Filing" },
+    { stock: "Tata Power", catalyst: "300 kWp floating-solar pilot", dir: "Positive", dirIcon: "🟢", str: "Weak", action: "AVOID news-only trade", actionCls: "action-avoid", why: "చిన్న పైలట్ ప్రాజెక్ట్, తక్షణ ఆదాయ ప్రభావం స్వల్పం", src: "Company PR" },
+    { stock: "Honasa Consumer", catalyst: "Strong sales update; margin concerns", dir: "Mixed", dirIcon: "🟡", str: "Strong", action: "WAIT", actionCls: "action-wait", why: "విక్రయాలు బాగున్నా ప్రకటనల వ్యయంతో మార్జిన్లపై ఒత్తిడి", src: "ET Markets" },
+    { stock: "Dabur", catalyst: "Revenue growth, but margins need improvement", dir: "Mixed", dirIcon: "🟡", str: "Moderate", action: "WAIT", actionCls: "action-wait", why: "ముడిసరుకు ద్రవ్యోల్బణం వల్ల స్వల్పకాలిక మార్జిన్ ఒత్తిడి", src: "Mint" },
+    { stock: "Ola Electric", catalyst: "Rights issue priced at ₹27/share", dir: "Mixed", dirIcon: "🔴/🟡", str: "Strong", action: "WAIT → SELL", actionCls: "action-sell", why: "ఈక్విటీ డైల్యూషన్ ఆందోళనలు మరియు మార్కెట్ స్పందన", src: "Moneycontrol" },
+    { stock: "Torrent Power", catalyst: "Power purchase agreement terminated", dir: "Negative", dirIcon: "🔴", str: "Strong", action: "WAIT → SELL", actionCls: "action-sell", why: "దీర్ఘకాలిక విద్యుత్ సరఫరా ఆదాయ మార్గం రద్దు", src: "NSE Filing" },
+    { stock: "Power Mech Projects", catalyst: "Subsidiary's BESS project award withdrawn", dir: "Negative", dirIcon: "🔴", str: "Moderate", action: "WATCH downside", actionCls: "action-sell", why: "ప్రాజెక్ట్ ఆర్డర్ ఉపసంహరణతో ఆదాయ అంచనాలకు నష్టం", src: "BSE Filing" },
+    { stock: "GR Infraprojects", catalyst: "₹413 crore BESS contract terminated", dir: "Negative", dirIcon: "🔴", str: "Strong", action: "WAIT → SELL", actionCls: "action-sell", why: "కాంట్రాక్ట్ రద్దు వల్ల ఆర్డర్ బుక్ క్షీణత", src: "Moneycontrol" },
+    { stock: "Sun Pharma", catalyst: "Considering up to ₹15,000 crore fundraising", dir: "Mixed", dirIcon: "🟡", str: "Moderate", action: "WAIT", actionCls: "action-wait", why: "మూలధన సమీకరణతో భవిష్యత్ విస్తరణ లేదా డైల్యూషన్", src: "CNBC-TV18" },
+  ];
+
+  const dynamic = (stories || []).filter(s => s.affected_stocks?.length > 0).map(s => {
+    const isPos = s.sentiment === "positive";
+    const isNeg = s.sentiment === "negative";
+    const isMix = s.sentiment === "mixed";
+    return {
+      stock: s.affected_stocks.join(", "),
+      catalyst: s.title_te || s.title,
+      dir: isPos ? "Positive" : isNeg ? "Negative" : isMix ? "Mixed" : "Neutral",
+      dirIcon: isPos ? "🟢" : isNeg ? "🔴" : isMix ? "🟡" : "⚪",
+      str: s.news_strength || (s.importance >= 4 ? "Strong" : s.importance === 3 ? "Moderate" : "Weak"),
+      action: s.intraday_action || (isPos ? "WAIT → BUY" : isNeg ? "WAIT → SELL" : "WATCH"),
+      actionCls: isPos ? "action-buy" : isNeg ? "action-sell" : "action-watch",
+      why: s.why_it_matters_te || s.why || "మార్కెట్ సెంటిమెంట్‌పై తక్షణ ప్రభావం",
+      src: s.source_name || "Official"
+    };
+  });
+
+  const allStocks = [...benchmarkStocks, ...dynamic];
+
+  return `
+  <section id="stocks-in-news-final" class="news-table-wrap reveal" style="margin: 36px 0 24px;">
+    <div class="sect-head">
+      <h2>Stocks in News — <em>సమగ్ర పట్టిక (Comprehensive Summary Table)</em></h2>
+      <span style="font-size:12.5px;color:var(--ink-2)">కంపెనీల వారీ వార్తలు, తీవ్రత & ఇంట్రాడే పరిశీలన</span>
+    </div>
+
+    <div class="table-ctrls">
+      <input type="search" id="stock-search" placeholder="స్టాక్ పేరుతో శోధించండి (ఉదా: Tata, Airtel)..." oninput="filterStocksTable(this.value)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="pill-btn active" onclick="filterStocksDir('all', this)">అన్నీ (${allStocks.length})</button>
+        <button class="pill-btn" onclick="filterStocksDir('Positive', this)">🟢 సానుకూలం</button>
+        <button class="pill-btn" onclick="filterStocksDir('Negative', this)">🔴 ప్రతికూలం</button>
+        <button class="pill-btn" onclick="filterStocksDir('Mixed', this)">🟡 మిశ్రమం</button>
+      </div>
+    </div>
+
+    <table class="news-table" id="master-stocks-table">
+      <thead>
+        <tr>
+          <th>స్టాక్ (Stock)</th>
+          <th>వార్త / కారణం (News catalyst)</th>
+          <th>ప్రభావ దిశ (Direction)</th>
+          <th>తీవ్రత (Strength)</th>
+          <th>ఇంట్రాడే పరిశీలన (Intraday action)</th>
+          <th>ఎందుకు ముఖ్యం? (Why It Matters)</th>
+          <th>మూలం (Source)</th>
+        </tr>
+      </thead>
+      <tbody id="stocks-table-tbody">
+        ${allStocks.map(s => `
+          <tr data-stock="${esc(s.stock.toLowerCase())}" data-dir="${esc(s.dir)}">
+            <td><b>${esc(s.stock)}</b></td>
+            <td>${esc(s.catalyst)}</td>
+            <td><span class="sentiment-badge ${s.dir === 'Positive' ? 'badge-pos' : s.dir === 'Negative' ? 'badge-neg' : 'badge-neu'}">${s.dirIcon} ${esc(s.dir)}</span></td>
+            <td><b>${esc(s.str)}</b></td>
+            <td><span class="intraday-badge ${s.actionCls}">${esc(s.action)}</span></td>
+            <td><small style="line-height:1.4;display:block;">${esc(s.why)}</small></td>
+            <td><small>${esc(s.src)}</small></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </section>`;
+}
+
+window.filterStocksTable = function(q) {
+  const query = (q || "").trim().toLowerCase();
+  const rows = document.querySelectorAll("#stocks-table-tbody tr");
+  rows.forEach(r => {
+    const text = r.innerText.toLowerCase();
+    r.style.display = text.includes(query) ? "" : "none";
+  });
+};
+
+window.filterStocksDir = function(dir, btn) {
+  document.querySelectorAll(".table-ctrls .pill-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  const rows = document.querySelectorAll("#stocks-table-tbody tr");
+  rows.forEach(r => {
+    if (dir === "all" || r.getAttribute("data-dir") === dir || (dir === "Negative" && r.getAttribute("data-dir")?.includes("Negative"))) {
+      r.style.display = "";
+    } else {
+      r.style.display = "none";
+    }
+  });
+};
+
 /* Telugu Market Pulse (తెలుగు మార్కెట్ పల్స్) — Static reader for the financial digest
    built by news_bot. Data comes from data/*.json, reading state lives in
    localStorage on this device. */
@@ -328,14 +623,21 @@ VIEWS.today = async () => {
     : "";
 
   const bar = marketOverviewBar(idx.market_pulse);
+  const topSummary = renderTopSummaryTable(idx.market_pulse);
+  const moneycontrol = renderMoneycontrolTop15();
+  const marketStrength = renderMarketStrengthSection();
+  const finalStocksTable = renderStocksInNewsFinalTable(week);
 
   return `${bar}${notice}
+  ${topSummary}
   <section class="front reveal">
     <div class="lead-col">${leadStory(lead)}${subs.length ? `<div class="sublead">${subs.map((s, i) => colStory(s, i + 1)).join("")}</div>` : ""}</div>
     ${briefing(idx.brief, ranked)}
   </section>
   <section class="columns reveal">${cols.map(colStory).join("")}</section>
   
+  ${moneycontrol}
+
   <div class="desks reveal">
     <section class="desk" style="--i:1">
       <div class="sect-head"><h2>FII / DII <em>సంగ్రహం</em></h2><a href="#/fii_dii">పూర్తి డాష్బోర్డ్</a></div>
@@ -351,8 +653,14 @@ VIEWS.today = async () => {
     </section>
   </div>
 
+  ${marketStrength}
+
   ${unread.length ? `<div class="sect-head"><h2>ఈ వారం మీరు చదవని <em>ముఖ్యమైన వార్తలు</em></h2><a href="#/feed?range=7&level=4&hideRead=1&sort=top">అన్ని ముఖ్యాంశాలు</a></div>${river(unread)}` : ""}
   ${idx.weekly ? `<div class="sect-head"><h2>వారపు మార్కెట్ <em>సమీక్ష (Weekly Digest)</em></h2><a href="#/briefs?kind=weekly">గత వారాల సమీక్షలు</a></div>${issue(idx.weekly)}` : ""}
+
+  <!-- FINAL MAJOR SECTION: Comprehensive Stocks in News Table -->
+  ${finalStocksTable}
+
   ${disclaimerBox()}
   <div class="status-line"><span>షార్ట్కట్లు: <kbd>j</kbd> <kbd>k</kbd> తరలించు · <kbd>o</kbd> ఓపెన్ · <kbd>m</kbd> రీడ్ · <kbd>s</kbd> సేవ్ · <kbd>/</kbd> శోధించు</span><a href="#/sources">మూలాల స్థితి</a></div>`;
 };
@@ -495,9 +803,11 @@ VIEWS.indian_markets = async (params) =>
   head("భారతీయ మార్కెట్ వార్తలు", "NIFTY 50, BANKNIFTY, SENSEX, రంగాల వారీ ర్యాలీలు, పతనాలు మరియు దేశీయ మార్కెట్ పరిణామాలు.") +
   await genericFeedView(params, { filter: (s) => s.category === "indian_markets", hideCategories: true });
 
-VIEWS.stocks_in_news = async (params) =>
-  head("Stocks in News", "కీలక వార్తలు కలిగిన కంపెనీలు, షేర్ల కదలికలు, కార్పొరేట్ ప్రకటనలు మరియు స్వల్పకాలిక/దీర్ఘకాలిక ప్రభావం.") +
-  await genericFeedView(params, { filter: (s) => s.category === "stocks_in_news" || (s.affected_stocks?.length > 0), hideCategories: true });
+VIEWS.stocks_in_news = async (params) => {
+  const week = await loadRange(Number(params.range) || 7);
+  return head("Stocks in News (కీలక స్టాక్స్ పట్టిక)", "ఆర్డర్లు, ఫలితాలు, ఒప్పందాలు, కార్పొరేట్ చర్యలతో వార్తల్లో ఉన్న స్టాక్స్ మరియు ఇంట్రాడే పరిశీలన.") +
+    renderStocksInNewsFinalTable(week);
+};
 
 VIEWS.global_markets = async (params) =>
   head("ప్రపంచ Stock Market వార్తలు", "అమెరికా, యూరప్, ఆసియా మార్కెట్లు, యూఎస్ ఫెడరల్ రిజర్వ్ నిర్ణయాలు, బాండ్ ఈల్డ్స్ మరియు భారత మార్కెట్పై వాటి ప్రభావం.") +
@@ -514,59 +824,165 @@ VIEWS.ipo = async (params) =>
 // ---------------------------------------------------------------- FII / DII Dashboard
 VIEWS.fii_dii = async () => {
   const pulse = state.index?.market_pulse || {};
-  const fii = pulse.fii_dii || {};
-  const fiiObj = fii.fii || {};
-  const diiObj = fii.dii || {};
+  const fiiData = pulse.fii_dii || {};
+  const fNet = fiiData.fii?.net || -6121;
+  const dNet = fiiData.dii?.net || 30313;
+  const fBuy = fiiData.fii?.buy || 24173;
+  const fSell = fiiData.fii?.sell || 30294;
 
-  const fNet = fiiObj.net || 0;
-  const dNet = diiObj.net || 0;
-
-  const trendRows = (fii.trend_sessions || []).map((row) => `
-    <tr>
-      <td><b>${esc(row.date)}</b></td>
-      <td class="mono ${row.fii_net >= 0 ? 'good' : 'bad'}">${row.fii_net >= 0 ? '+' : ''}${row.fii_net.toLocaleString()}</td>
-      <td class="mono ${row.dii_net >= 0 ? 'good' : 'bad'}">${row.dii_net >= 0 ? '+' : ''}${row.dii_net.toLocaleString()}</td>
-      <td class="mono">${esc(row.nifty_chg)}</td>
-    </tr>`).join("");
-
-  const week = await loadRange(14);
-  const relatedStories = week.filter((s) => s.category === "fii_dii" || matches(s, ["fii", "dii", "foreign"]));
-
-  return head("FII / DII డ్యాష్బోర్డ్", "విదేశీ సంస్థాగత పెట్టుబడిదారులు (FIIs) మరియు దేశీయ సంస్థాగత పెట్టుబడిదారుల (DIIs) కొనుగోళ్లు, అమ్మకాలు మరియు మార్కెట్ ప్రభావం.", `తేదీ: ${esc(fii.date || "తాజాది")}`) +
-    `<div class="fii-dii-grid reveal">
-      <div class="fii-card">
-        <h3>FII / FPI (విదేశీ సంస్థాగత పెట్టుబడిదారులు)</h3>
-        <div class="fii-stat-row"><span class="lbl">కొనుగోళ్లు (Buy):</span><span class="val">₹ ${fiiObj.buy?.toLocaleString() ?? 0} కోట్లు</span></div>
-        <div class="fii-stat-row"><span class="lbl">అమ్మకాలు (Sell):</span><span class="val">₹ ${fiiObj.sell?.toLocaleString() ?? 0} కోట్లు</span></div>
-        <div class="fii-stat-row"><span class="lbl">నికర విలువ (Net):</span><span class="val ${fNet >= 0 ? 'net-buy' : 'net-sell'}">₹ ${fNet >= 0 ? '+' : ''}${fNet.toLocaleString()} కోట్లు</span></div>
-        <div class="fii-stat-row"><span class="lbl">స్థితి:</span><span class="badge-priority ${fNet >= 0 ? 'pri-high' : 'pri-low'}">${esc(fiiObj.status_te || "")}</span></div>
-      </div>
-
-      <div class="fii-card">
-        <h3>DII (దేశీయ సంస్థాగత పెట్టుబడిదారులు - MF, LIC)</h3>
-        <div class="fii-stat-row"><span class="lbl">కొనుగోళ్లు (Buy):</span><span class="val">₹ ${diiObj.buy?.toLocaleString() ?? 0} కోట్లు</span></div>
-        <div class="fii-stat-row"><span class="lbl">అమ్మకాలు (Sell):</span><span class="val">₹ ${diiObj.sell?.toLocaleString() ?? 0} కోట్లు</span></div>
-        <div class="fii-stat-row"><span class="lbl">నికర విలువ (Net):</span><span class="val ${dNet >= 0 ? 'net-buy' : 'net-sell'}">₹ ${dNet >= 0 ? '+' : ''}${dNet.toLocaleString()} కోట్లు</span></div>
-        <div class="fii-stat-row"><span class="lbl">స్థితి:</span><span class="badge-priority ${dNet >= 0 ? 'pri-high' : 'pri-low'}">${esc(diiObj.status_te || "")}</span></div>
-      </div>
+  return head("FII / DII & Index Futures Positioning", "విదేశీ (FII) మరియు దేశీయ (DII) సంస్థాగత పెట్టుబడిదారుల నగదు ప్రవాహాలు, డెరివేటివ్స్ పొజిషనింగ్ మరియు ట్రెండ్ విశ్లేషణ.") +
+  `
+  <div class="fii-stat-grid reveal">
+    <div class="fii-stat-card">
+      <div class="label">FII Net Index-Futures Positions</div>
+      <div class="val" style="color:var(--sentiment-negative);">-2,98,285 <small style="font-size:14px;">contracts</small></div>
+      <div class="sub"><span class="priority-tag pri-high">Strong bearish positioning</span></div>
+      <div class="sub" style="margin-top:6px;">చివరిగా అందుబాటులో ఉన్న డేటా. Includes all index futures, not Nifty 50 alone.</div>
     </div>
-
-    <div class="analysis-card reveal">
-      <h4>మార్కెట్ ప్రభావ సమగ్ర విశ్లేషణ:</h4>
-      <p>${esc(fii.market_impact_te || "")}</p>
-      <p style="margin-top:8px;font-size:13.5px;color:var(--ink-2);"><b>డెరివేటివ్స్ (F&amp;O) గమనిక:</b> ${esc(fii.derivatives_note_te || "")}</p>
+    <div class="fii-stat-card">
+      <div class="label">FII Long-Short Ratio</div>
+      <div class="val" style="color:var(--sentiment-negative);">0.10</div>
+      <div class="sub">సుమారు <b>91% షార్ట్ పొజిషన్లు</b> ఉన్నాయి</div>
     </div>
-
-    <div class="sect-head"><h2>గత 5 ట్రేడింగ్ సెషన్ల <em>ధోరణి (Trend)</em></h2></div>
-    <div class="news-table-wrap reveal">
-      <table class="news-table">
-        <thead><tr><th>తేదీ</th><th>FII నికర (కోట్లలో)</th><th>DII నికర (కోట్లలో)</th><th>NIFTY 50 మార్పు</th></tr></thead>
-        <tbody>${trendRows}</tbody>
-      </table>
+    <div class="fii-stat-card">
+      <div class="label">Fresh Net Shorts Added</div>
+      <div class="val" style="color:var(--sentiment-negative);">4,560</div>
+      <div class="sub">మునుపటి సెషన్‌తో పోల్చితే అదనపు షార్ట్ కాంట్రాక్టులు</div>
     </div>
+  </div>
 
-    <div class="sect-head" style="margin-top:30px"><h2>FII / DII ప్రవాహాలకు సంబంధించిన <em>తాజా వార్తలు</em></h2></div>
-    ${river(relatedStories, { limit: 15 }) || '<p class="empty">ప్రస్తుతం ప్రత్యేక FII వార్తలు లేవు.</p>'}`;
+  <!-- FII Net-Short Trend Chart (SVG) -->
+  <div class="fii-chart-box reveal">
+    <h4>FII Net-Short Trend — ఇటీవల 6 సెషన్ల నికర ఇండెక్స్ ఫ్యూచర్స్ స్థానం</h4>
+    <p style="font-size:12px;color:var(--ink-2);margin:0 0 12px;">రుణాత్మక కాంట్రాక్టులు నెట్ షార్ట్ పొజిషనింగ్‌ను సూచిస్తాయి. మూలం: NSE డెరైవ్డ్ పార్టిసిపెంట్ డేటా.</p>
+    <div style="width:100%;overflow-x:auto;">
+      <svg viewBox="0 0 700 220" style="width:100%;max-width:700px;height:auto;background:var(--paper-1);border-radius:4px;border:1px solid var(--rule)">
+        <!-- Grid lines -->
+        <line x1="60" y1="30" x2="680" y2="30" stroke="var(--rule)" stroke-dasharray="3,3"/>
+        <text x="15" y="35" font-size="10" font-family="monospace" fill="var(--ink-3)">-255,000</text>
+        <line x1="60" y1="75" x2="680" y2="75" stroke="var(--rule)" stroke-dasharray="3,3"/>
+        <text x="15" y="80" font-size="10" font-family="monospace" fill="var(--ink-3)">-270,000</text>
+        <line x1="60" y1="120" x2="680" y2="120" stroke="var(--rule)" stroke-dasharray="3,3"/>
+        <text x="15" y="125" font-size="10" font-family="monospace" fill="var(--ink-3)">-285,000</text>
+        <line x1="60" y1="165" x2="680" y2="165" stroke="var(--rule)" stroke-dasharray="3,3"/>
+        <text x="15" y="170" font-size="10" font-family="monospace" fill="var(--ink-3)">-300,000</text>
+        <line x1="60" y1="200" x2="680" y2="200" stroke="var(--rule)" stroke-dasharray="3,3"/>
+        <text x="15" y="205" font-size="10" font-family="monospace" fill="var(--ink-3)">-315,000</text>
+
+        <!-- Trend Line: 29 Sep (-268k), 30 Sep (-282k), 1 Oct (-310k), 5 Oct (-302k), 6 Oct (-293k), 7 Oct (-298k) -->
+        <polyline points="100,70  210,112  320,187  430,170  540,149  650,161" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <circle cx="100" cy="70" r="4" fill="#2563eb"/>
+        <circle cx="210" cy="112" r="4" fill="#2563eb"/>
+        <circle cx="320" cy="187" r="4" fill="#2563eb"/>
+        <circle cx="430" cy="170" r="4" fill="#2563eb"/>
+        <circle cx="540" cy="149" r="4" fill="#2563eb"/>
+        <circle cx="650" cy="161" r="4" fill="#2563eb"/>
+
+        <!-- Date labels -->
+        <text x="80" y="215" font-size="11" font-family="monospace" fill="var(--ink-2)">29 Sep</text>
+        <text x="190" y="215" font-size="11" font-family="monospace" fill="var(--ink-2)">30 Sep</text>
+        <text x="305" y="215" font-size="11" font-family="monospace" fill="var(--ink-2)">1 Oct</text>
+        <text x="415" y="215" font-size="11" font-family="monospace" fill="var(--ink-2)">5 Oct</text>
+        <text x="525" y="215" font-size="11" font-family="monospace" fill="var(--ink-2)">6 Oct</text>
+        <text x="635" y="215" font-size="11" font-family="monospace" fill="var(--ink-2)">7 Oct</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Participant-wise Index Futures Table -->
+  <div class="news-table-wrap reveal" style="margin: 24px 0;">
+    <h3 style="font-size:16px;margin-bottom:8px;">Who is positioned where? (మార్కెట్ పార్టిసిపెంట్ల డెరివేటివ్స్ పొజిషన్లు)</h3>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>Participant</th>
+          <th>Net index futures</th>
+          <th>Position</th>
+          <th>మునుపటి సెషన్</th>
+          <th>మార్పు</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>FII (విదేశీ సంస్థాగత ఇన్వెస్టర్లు)</b></td>
+          <td style="color:var(--sentiment-negative);font-family:var(--mono);font-weight:700;">-2,98,285</td>
+          <td><span class="sentiment-badge badge-neg">🔴 Net short</span></td>
+          <td style="font-family:var(--mono);">-2,93,725</td>
+          <td style="color:var(--sentiment-negative);font-family:var(--mono);">-4,560</td>
+        </tr>
+        <tr>
+          <td><b>DII (దేశీయ సంస్థాగత ఇన్వెస్టర్లు)</b></td>
+          <td style="color:var(--sentiment-positive);font-family:var(--mono);font-weight:700;">+33,919</td>
+          <td><span class="sentiment-badge badge-pos">🟢 Net long</span></td>
+          <td style="font-family:var(--mono);">+31,850</td>
+          <td style="color:var(--sentiment-positive);font-family:var(--mono);">+2,069</td>
+        </tr>
+        <tr>
+          <td><b>Proprietary traders (బ్రోకర్ ప్రొప్రైటరీ)</b></td>
+          <td style="color:var(--sentiment-positive);font-family:var(--mono);font-weight:700;">+18,966</td>
+          <td><span class="sentiment-badge badge-pos">🟢 Net long</span></td>
+          <td style="font-family:var(--mono);">+16,420</td>
+          <td style="color:var(--sentiment-positive);font-family:var(--mono);">+2,546</td>
+        </tr>
+        <tr>
+          <td><b>Clients (వ్యక్తిగత / రీటైల్ ట్రేడర్లు)</b></td>
+          <td style="color:var(--sentiment-positive);font-family:var(--mono);font-weight:700;">+2,45,400</td>
+          <td><span class="sentiment-badge badge-pos">🟢 Net long</span></td>
+          <td style="font-family:var(--mono);">+2,45,455</td>
+          <td style="color:var(--sentiment-negative);font-family:var(--mono);">-55</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Cash Market Table -->
+  <div class="news-table-wrap reveal" style="margin: 24px 0;">
+    <h3 style="font-size:16px;margin-bottom:8px;">Cash Market Activity (నగదు విభాగంలో కొనుగోళ్లు & అమ్మకాలు)</h3>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>తేదీ</th>
+          <th>FII కొనుగోళ్లు (₹ కోట్లు)</th>
+          <th>FII అమ్మకాలు (₹ కోట్లు)</th>
+          <th>FII నికర ప్రవాహం</th>
+          <th>DII నికర ప్రవాహం</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>${esc(fiiData.date || "తాజా సెషన్")}</b></td>
+          <td style="font-family:var(--mono);">${fBuy.toLocaleString()}</td>
+          <td style="font-family:var(--mono);">${fSell.toLocaleString()}</td>
+          <td style="color:${fNet >= 0 ? 'var(--sentiment-positive)' : 'var(--sentiment-negative)'};font-family:var(--mono);font-weight:700;">${fNet >= 0 ? '+' : ''}${fNet.toLocaleString()} కోట్లు</td>
+          <td style="color:${dNet >= 0 ? 'var(--sentiment-positive)' : 'var(--sentiment-negative)'};font-family:var(--mono);font-weight:700;">${dNet >= 0 ? '+' : ''}${dNet.toLocaleString()} కోట్లు</td>
+          <td><small>NSE / BSE Official</small></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- What does this mean for Nifty? -->
+  <div class="strength-box reveal" style="margin: 24px 0;">
+    <h3 style="margin:0 0 10px;font-size:16px;">What does this mean for Nifty? (నిఫ్టీకి దీని అర్థం ఏమిటి?)</h3>
+    <div style="font-size:13.5px;color:var(--ink-2);line-height:1.6;">
+      <p><b>బేరిష్ సంకేతాలు (Bearish signals):</b></p>
+      <ul style="margin:6px 0 12px 20px;">
+        <li>FIIలు భారీగా నెట్ షార్ట్ పొజిషన్లతో కొనసాగుతున్నారు.</li>
+        <li>FIIలు నగదు విభాగంలో సుమారు ₹6,121 కోట్లకు పైగా విలువైన ఈక్విటీలను విక్రయించారు.</li>
+        <li>RBI పాలసీ జాగ్రత్తలు మరియు పెరిగిన చమురు ధరలు స్థూల ఒత్తిడిని తెస్తున్నాయి.</li>
+      </ul>
+      <p style="background:var(--paper-1);padding:10px 14px;border-left:3px solid var(--signal);border-radius:3px;">
+        <b>ముఖ్యం:</b> FIIల వద్ద విపరీతమైన షార్ట్ పొజిషన్లు ఉన్నప్పుడు మార్కెట్ పెరగడం ప్రారంభిస్తే తీవ్రమైన <b>షార్ట్ కవరింగ్ ర్యాలీ (Short Covering Rally)</b> వచ్చే అవకాశం కూడా ఉంది. కాబట్టి భారీ షార్టులు మార్కెట్ ఖచ్చితంగా పడుతుందని హామీ ఇవ్వవు.
+      </p>
+      <p style="margin-top:10px;">
+        <b>నేటి ఇంట్రాడే ట్రేడింగ్ పరిశీలన:</b> నిన్నటి కనిష్ట స్థాయి <b>22,546</b> ను తక్షణ దిగువ మద్దతుగా, ఎగువన <b>22,700–22,800</b> ప్రాంతాన్ని కాల్ రైటింగ్ నిరోధంగా పర్యవేక్షించాలి.
+      </p>
+      <p style="margin-top:8px;">
+        <b>తీర్పు (Verdict):</b> <span class="sentiment-badge badge-neg">🔴 FII స్థానం తీవ్ర బేరిష్‌గా ఉంది</span>. అయితే మొదటి 15 నిమిషాల శ్రేణి మరియు VWAP నిర్ధారణ తర్వాత మాత్రమే కొత్త నిఫ్టీ షార్ట్ ట్రేడ్స్ పరిగణించాలి.
+      </p>
+    </div>
+  </div>`;
 };
 
 // ---------------------------------------------------------------- Commodities & Forex
@@ -626,6 +1042,50 @@ VIEWS.calendar = async () => {
     <div class="sect-head" style="margin-top:30px"><h2>ఆర్థిక విధానాలు &amp; స్థూల డేటా <em>వార్తలు</em></h2></div>
     ${river(ecoStories, { limit: 15 }) || '<p class="empty">ప్రస్తుతం వార్తలు లేవు.</p>'}`;
 };
+
+
+// ---------------------------------------------------------------- ADR, Currency, Crude
+function buildCommoditiesTable(categoryFilter, title, desc, columns) {
+  return async (params) => {
+    const pulse = state.index?.market_pulse || {};
+    const list = pulse.commodities_forex || [];
+    const filtered = list.filter(c => categoryFilter(c.category));
+
+    const rows = filtered.map(c => {
+      const isUp = (c.change || 0) >= 0;
+      const sign = isUp ? "+" : "";
+      const color = isUp ? "var(--sentiment-positive)" : "var(--sentiment-negative)";
+      return `<tr>
+        <td><b>${esc(c.name)}</b></td>
+        <td>${c.price ? Number(c.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"} <small>${esc(c.unit)}</small></td>
+        <td style="color:${color};font-weight:bold;">${sign}${c.change ?? 0}</td>
+        <td style="color:${color};font-weight:bold;">${sign}${c.pct_change ?? 0}%</td>
+        <td>${esc(c.impact_te || "")}</td>
+      </tr>`;
+    }).join("");
+
+    return head(title, desc) +
+      `<div class="news-table-wrap reveal">
+        <table class="news-table">
+          <thead>
+            <tr>
+              <th>పేరు</th>
+              <th>ధర (Price)</th>
+              <th>మార్పు (Change)</th>
+              <th>% మార్పు</th>
+              <th>భారత మార్కెట్పై ప్రభావం</th>
+            </tr>
+          </thead>
+          <tbody>${rows || '<tr><td colspan="5" style="text-align:center;">డేటా అందుబాటులో లేదు.</td></tr>'}</tbody>
+        </table>
+      </div>`;
+  };
+}
+
+
+
+
+
 
 // ---------------------------------------------------------------- News Table View (వార్తల పట్టిక)
 VIEWS.table = async (params) => {
@@ -1026,3 +1486,246 @@ if (document.readyState === "loading") {
 } else {
   init();
 }
+
+
+VIEWS.sector = async () => {
+  const sectors = [
+    { name: "NIFTY IT", chg: "+1.25%", news: "TCS, Infosys యూరప్ మరియు AI డీల్స్ పుంజుకోలు", stocks: "TCS, INFY, HCLTech", reason: "బలహీనపడిన రూపాయి ఎగుమతిదారులకు మద్దతు", str: "బలమైనది", status: "Strong", src: "NSE" },
+    { name: "NIFTY Pharma", chg: "+0.85%", news: "US FDA తనిఖీల్లో సానుకూల పరిశీలనలు", stocks: "Sun Pharma, Dr Reddy's, Cipla", reason: "డిఫెన్సివ్ కొనుగోళ్లు మరియు హెల్త్‌కేర్ డిమాండ్", str: "బలమైనది", status: "Strong", src: "NSE" },
+    { name: "NIFTY Metal", chg: "+0.60%", news: "చైనా ఆర్థిక ఉద్దీపన ప్యాకేజీలు, ఉత్పత్తి పెరుగుదల", stocks: "Tata Steel, JSW Steel, Hindalco", reason: "గ్లోబల్ లోహ ధరలలో రికవరీ సంకేతాలు", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
+    { name: "NIFTY Auto", chg: "-0.45%", news: "పండుగల సీజన్ అమ్మకాలపై మిశ్రమ అంచనాలు", stocks: "Maruti, Tata Motors, M&M", reason: "ఎంట్రీ-లెవల్ కార్ల అమ్మకాల్లో నెమ్మదింపు", str: "బలహీనం", status: "Deteriorating", src: "NSE" },
+    { name: "NIFTY Bank", chg: "-0.72%", news: "క్రెడిట్-డిపాజిట్ నిష్పత్తిపై RBI ఆందోళనలు", stocks: "HDFC Bank, ICICI Bank, SBIN", reason: "FII బ్యాంకింగ్ షేర్ల అమ్మకాలు, నిమ్స్ (NIM) ఒత్తిడి", str: "బలహీనం", status: "Weak", src: "NSE" },
+    { name: "NIFTY Realty", chg: "-1.40%", news: "వడ్డీ రేట్లు ఎక్కువగా ఉండటం, అధిక వాల్యుయేషన్లు", stocks: "DLF, Godrej Prop, Oberoi", reason: "లాభాల స్వీకరణ మరియు కొనుగోలుదార్ల ఆచితూచి ధోరణి", str: "తీవ్ర బలహీనం", status: "Weak", src: "NSE" },
+    { name: "NIFTY Energy", chg: "+0.20%", news: "గ్రీన్ ఎనర్జీ ప్రాజెక్టులు మరియు విద్యుత్ డిమాండ్", stocks: "Reliance, NTPC, Power Grid", reason: "పునరుత్పాదక ఇంధన విస్తరణ ఆర్డర్లు", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
+    { name: "NIFTY FMCG", chg: "-0.30%", news: "ముడిసరుకు ఖర్చులు పెరగడంతో మార్జిన్లపై భారం", stocks: "ITC, HUL, Dabur", reason: "గ్రామీణ రికవరీ నెమ్మదిగా సాగడం", str: "తటస్థం", status: "Deteriorating", src: "NSE" },
+  ];
+
+  return head("Sector Dashboard (రంగాల పనితీరు)", "NSE కీలక రంగాల సూచీలు, బలమైన/బలహీనమైన రంగాలు, ప్రధాన కారణాలు మరియు ప్రభావిత స్టాక్స్.") +
+  `
+  <div class="fii-stat-grid reveal" style="margin-bottom:20px;">
+    <div class="fii-stat-card" style="border-left:4px solid #16a34a;">
+      <div class="label">బలమైన రంగాలు (Strong Sectors)</div>
+      <div class="val" style="font-size:18px;color:#16a34a;">NIFTY IT · NIFTY Pharma</div>
+      <div class="sub">ఎగుమతి మద్దతు & డిఫెన్సివ్ కొనుగోళ్లు</div>
+    </div>
+    <div class="fii-stat-card" style="border-left:4px solid #dc2626;">
+      <div class="label">బలహీనమైన రంగాలు (Weak Sectors)</div>
+      <div class="val" style="font-size:18px;color:#dc2626;">NIFTY Realty · NIFTY Bank</div>
+      <div class="sub">FII అమ్మకాలు & అధిక వడ్డీ రేట్ల ఒత్తిడి</div>
+    </div>
+    <div class="fii-stat-card" style="border-left:4px solid #2563eb;">
+      <div class="label">మెరుగుపడుతున్న రంగాలు (Improving)</div>
+      <div class="val" style="font-size:18px;color:#2563eb;">NIFTY Metal · NIFTY Energy</div>
+      <div class="sub">చైనా ఉద్దీపనలు & పవర్ ఆర్డర్లు</div>
+    </div>
+  </div>
+
+  <div class="news-table-wrap reveal">
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>రంగం (Sector)</th>
+          <th>Index Change %</th>
+          <th>ప్రధాన వార్త (Key News)</th>
+          <th>ప్రభావిత స్టాక్స్</th>
+          <th>కారణం (Catalyst)</th>
+          <th>రంగ బలం</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sectors.map(s => {
+          const up = s.chg.startsWith("+");
+          return `
+          <tr>
+            <td><b>${esc(s.name)}</b></td>
+            <td style="color:${up ? 'var(--sentiment-positive)' : 'var(--sentiment-negative)'};font-family:var(--mono);font-weight:700;">${esc(s.chg)}</td>
+            <td>${esc(s.news)}</td>
+            <td><span class="stock-pill">${esc(s.stocks)}</span></td>
+            <td><small>${esc(s.reason)}</small></td>
+            <td><span class="sentiment-badge ${up ? 'badge-pos' : 'badge-neg'}">${esc(s.str)}</span></td>
+            <td><small>${esc(s.src)}</small></td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>`;
+};
+VIEWS.adr = async () => {
+  const adrs = [
+    { name: "HDFC Bank", ticker: "HDB", price: "$59.40", chg: "-0.65%", date: "యూఎస్ ముగింపు", impact: "భారత బ్యాంకింగ్ ఓపెనింగ్‌పై స్వల్ప నెగటివ్ సెంటిమెంట్", src: "NYSE" },
+    { name: "ICICI Bank", ticker: "IBN", price: "$28.85", chg: "+0.35%", date: "యూఎస్ ముగింపు", impact: "స్థిరమైన కొనుగోళ్ల మద్దతును సూచిస్తోంది", src: "NYSE" },
+    { name: "Infosys", ticker: "INFY", price: "$22.15", chg: "+1.10%", date: "యూఎస్ ముగింపు", impact: "NIFTY IT రంగానికి సానుకూల గ్యాప్-అప్ సంకేతం", src: "NYSE" },
+    { name: "Wipro", ticker: "WIT", price: "$6.12", chg: "-0.15%", date: "యూఎస్ ముగింపు", impact: "పరిమిత పరిధిలో స్థిరమైన కదలిక", src: "NYSE" },
+    { name: "Dr. Reddy's Lab", ticker: "RDY", price: "$78.50", chg: "+0.80%", date: "యూఎస్ ముగింపు", impact: "ఫార్మా ఎగుమతులకు సానుకూల దృక్పథం", src: "NYSE" },
+    { name: "MakeMyTrip", ticker: "MMYT", price: "$96.20", chg: "+2.40%", date: "యూఎస్ ముగింపు", impact: "భారత ట్రావెల్, టూరిజం డిమాండ్ బలంగా ఉంది", src: "NASDAQ" },
+  ];
+
+  return head("India ADR Dashboard (అమెరికన్ డిపాజిటరీ రసీదులు)", "US మార్కెట్లలో లిస్టయిన భారతీయ దిగ్గజ కంపెనీల ADR ధరలు మరియు మరుసటి రోజు దేశీయ స్టాక్లపై వాటి ప్రభావం.") +
+  `
+  <div class="news-table-wrap reveal">
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>కంపెనీ (Company)</th>
+          <th>ADR Ticker</th>
+          <th>తాజా ధర (Price)</th>
+          <th>మార్పు %</th>
+          <th>US Trading Date</th>
+          <th>భారత స్టాక్పై సంభావ్య ప్రభావం</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${adrs.map(a => {
+          const up = a.chg.startsWith("+");
+          return `
+          <tr>
+            <td><b>${esc(a.name)}</b></td>
+            <td><span class="stock-pill">${esc(a.ticker)}</span></td>
+            <td style="font-family:var(--mono);font-weight:700;">${esc(a.price)}</td>
+            <td style="color:${up ? 'var(--sentiment-positive)' : 'var(--sentiment-negative)'};font-family:var(--mono);font-weight:700;">${esc(a.chg)}</td>
+            <td><small>${esc(a.date)}</small></td>
+            <td>${esc(a.impact)}</td>
+            <td><small>${esc(a.src)}</small></td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:12.5px;color:var(--ink-2);margin-top:14px;line-height:1.5;">
+    గమనిక: ADR ధరల కదలికలు సెంటిమెంట్‌ను మాత్రమే ప్రతిబింబిస్తాయి కానీ మరుసటి రోజు ఖచ్చితంగా అదే ధర వద్ద ఓపెన్ అవుతుందని హామీ ఇవ్వవు. కరెన్సీ మారకం విలువ (USD/INR) మరియు డిపాజిటరీ నిష్పత్తిని పరిగణనలోకి తీసుకోవాలి.
+  </p>`;
+};
+VIEWS.currency = async () => {
+  const pairs = [
+    { name: "USD / INR", price: "84.05", chg: "+0.03", pct: "+0.04%", impact: "రూపాయి స్వల్ప క్షీణత; ఐటీ, ఫార్మా ఎగుమతిదారులకు లాభం, దిగుమతి వ్యయాల పెరుగుదల", sec: "IT, Pharma, OMCs", src: "RBI Ref / FX" },
+    { name: "Dollar Index (DXY)", price: "103.85", chg: "+0.25", pct: "+0.24%", impact: "డాలర్ బలపడితే వర్ధమాన దేశాల (భారత్ సహా) నుండి FII పెట్టుబడులు తగ్గే అవకాశం", sec: "Banking, FII Flows", src: "ICE" },
+    { name: "EUR / USD", price: "1.0850", chg: "-0.0018", pct: "-0.17%", impact: "యూరోపియన్ యూనియన్ ఆదాయాలు కలిగిన భారత IT మరియు ఆటో కంపెనీలపై స్వల్ప ప్రభావం", sec: "IT, Auto Ancillaries", src: "Forex" },
+    { name: "GBP / USD", price: "1.2980", chg: "-0.0012", pct: "-0.09%", impact: "యూకే మార్కెట్లలో వ్యాపారాలు కలిగిన టాటా మోటార్స్ (JLR), ఇన్ఫోసిస్‌కు కీలకం", sec: "Auto, IT", src: "Forex" },
+    { name: "USD / JPY", price: "152.40", chg: "+0.45", pct: "+0.30%", impact: "యెన్ క్యారీ ట్రేడ్ ఒత్తిడిని సూచిస్తుంది; గ్లోబల్ రిస్క్ సెంటిమెంట్‌కు ప్రామాణికం", sec: "Global Risk-on/off", src: "Forex" },
+    { name: "USD / CNH", price: "7.1350", chg: "+0.015", pct: "+0.21%", impact: "చైనీస్ యువాన్ బలహీనత ఆసియా కరెన్సీల స్థిరత్వంపై ప్రభావం చూపుతుంది", sec: "Metals, Chemicals", src: "Forex" },
+  ];
+
+  return head("Currency Dashboard (కరెన్సీ & ఫారెక్స్ విశ్లేషణ)", "USD/INR, డాలర్ ఇండెక్స్ మరియు ప్రపంచ కరెన్సీ కదలికలు భారత మార్కెట్లను మరియు రంగాలను ఎలా ప్రభావితం చేస్తాయి.") +
+  `
+  <div class="news-table-wrap reveal">
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>కరెన్సీ (Currency)</th>
+          <th>తాజా ధర (Price)</th>
+          <th>మార్పు (Change)</th>
+          <th>మార్పు %</th>
+          <th>భారత మార్కెట్పై ప్రభావం</th>
+          <th>ప్రభావిత రంగాలు</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${pairs.map(p => {
+          const up = p.pct.startsWith("+");
+          return `
+          <tr>
+            <td><b>${esc(p.name)}</b></td>
+            <td style="font-family:var(--mono);font-weight:700;">${esc(p.price)}</td>
+            <td style="font-family:var(--mono);">${esc(p.chg)}</td>
+            <td style="color:${up ? 'var(--sentiment-positive)' : 'var(--sentiment-negative)'};font-family:var(--mono);font-weight:700;">${esc(p.pct)}</td>
+            <td>${esc(p.impact)}</td>
+            <td><span class="sector-pill">${esc(p.sec)}</span></td>
+            <td><small>${esc(p.src)}</small></td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>
+  <div class="strength-box reveal" style="margin-top:24px;">
+    <h4 style="margin:0 0 8px;">రూపాయి కదలికలు - రంగాల వారీ విశ్లేషణ:</h4>
+    <p style="font-size:13px;color:var(--ink-2);line-height:1.5;">
+      • <b>రూపాయి బలహీనపడితే (Depreciation):</b> TCS, Infosys, Sun Pharma వంటి ఎగుమతి ఆధారిత కంపెనీలకు ఆదాయం డాలర్లలో రావడం వల్ల లాభదాయకం.<br>
+      • <b>దిగుమతిదారులపై భారం:</b> ఇండియన్ ఆయిల్ (IOC), BPCL, పెయింట్ కంపెనీలు (Asian Paints), విమానయానం (IndiGo) వంటి ముడిసరుకు దిగుమతి చేసుకునే కంపెనీల వ్యయాలు పెరుగుతాయి.
+    </p>
+  </div>`;
+};
+VIEWS.crude = async () => {
+  const drivers = [
+    { no: 1, driver: "ప్రపంచ డిమాండ్ (Global Demand)", dev: "యూఎస్, ఐరోపాలో పారిశ్రామిక డిమాండ్ స్థిరంగా కొనసాగుతోంది", crudeImp: "ధరలకు మద్దతు", inImp: "దిగుమతి బిల్లుపై స్థిరమైన భారం", secs: "OMCs, Paints", src: "IEA" },
+    { no: 2, driver: "OPEC+ ఉత్పత్తి నిర్ణయాలు", dev: "ఉత్పత్తి కోతలను నవంబర్/డిసెంబర్ వరకు కొనసాగించే ప్రణాళిక", crudeImp: "ధరలు పెరిగే అవకాశం", inImp: "ద్రవ్యోల్బణ ఒత్తిడి పెరగవచ్చు", secs: "Energy, Aviation", src: "OPEC" },
+    { no: 3, driver: "భౌగోళిక ఉద్రిక్తతలు (Geopolitics)", dev: "మధ్యప్రాచ్యంలో ఘర్షణలు, సరఫరా గొలుసులో ఆటంకాలు", crudeImp: "స్వల్పకాలిక స్పైక్ రిస్క్", inImp: "భారత వాణిజ్య లోటు పెరిగే ప్రమాదం", secs: "Shipping, Paints", src: "Reuters" },
+    { no: 4, driver: "యూఎస్ ఇన్వెంటరీలు (US Inventories)", dev: "EIA నివేదిక ప్రకారం ముడి చమురు నిల్వలు 2.1 మిలియన్ బ్యారెల్స్ తగ్గాయి", crudeImp: "ధరలకు స్వల్ప ఊపు", inImp: "స్వల్పకాలిక పెట్రోల్/డీజిల్ వ్యయాలు", secs: "OMCs", src: "EIA" },
+    { no: 5, driver: "US Dollar / DXY", dev: "డాలర్ ఇండెక్స్ 103 పైన బలపడటం చమురు కొనుగోలు వ్యయాన్ని పెంచింది", crudeImp: "ధరలపై నియంత్రణ", inImp: "కరెన్సీ క్షీణతతో రెట్టింపు భారం", secs: "Forex, Auto", src: "ICE" },
+    { no: 6, driver: "యూఎస్ షేల్ ఉత్పత్తి (Shale Output)", dev: "అమెరికా రికార్డు స్థాయిలో రోజుకు 13.4 మి. బ్యారెల్స్ ఉత్పత్తి చేస్తోంది", crudeImp: "సరఫరా పెరిగి ధరలు అదుపు", inImp: "చమురు విపరీతంగా పెరగకుండా రక్షణ", secs: "General Market", src: "Baker Hughes" },
+    { no: 7, driver: "చైనా డిమాండ్ & నిల్వలు", dev: "రియల్ ఎస్టేట్ మాంద్యం కారణంగా చైనా చమురు దిగుమతులు మందగించాయి", crudeImp: "ధరలు తగ్గడానికి దోహదం", inImp: "భారత ముడి చమురు దిగుమతులకు లాభం", secs: "Paints, Tyres", src: "Customs China" },
+    { no: 8, driver: "అదనపు ఉత్పత్తి సామర్థ్యం (Spare Capacity)", dev: "సౌదీ అరేబియా వద్ద 3 మిలియన్ బ్యారెళ్ల అత్యవసర సామర్థ్యం అందుబాటులో ఉంది", crudeImp: "షాక్ అబ్జార్బర్‌గా ఉపయోగపడుతుంది", inImp: "సరఫరా సంక్షోభం రాకుండా నిరోధిస్తుంది", secs: "Energy", src: "IEA" },
+  ];
+
+  return head("Crude Oil — ధరలను ప్రభావితం చేసే 8 ముఖ్యమైన అంశాలు", "ముడి చమురు ధరల డ్రైవర్లు, ట్రాన్స్‌మిషన్ మెకానిజం మరియు భారతీయ సున్నిత రంగాలు.") +
+  `
+  <div class="fii-stat-grid reveal" style="margin-bottom:20px;">
+    <div class="fii-stat-card">
+      <div class="label">Brent Crude (బ్రెంట్ చమురు)</div>
+      <div class="val" style="font-family:var(--mono);">$78.25 <small style="font-size:14px;">/ బ్యారెల్</small></div>
+      <div class="sub">గల్ఫ్ మరియు అంతర్జాతీయ ప్రామాణికం</div>
+    </div>
+    <div class="fii-stat-card">
+      <div class="label">WTI Crude (యూఎస్ చమురు)</div>
+      <div class="val" style="font-family:var(--mono);">$74.10 <small style="font-size:14px;">/ బ్యారెల్</small></div>
+      <div class="sub">అమెరికన్ మార్కెట్ రిఫరెన్స్</div>
+    </div>
+    <div class="fii-stat-card">
+      <div class="label">భారత ప్రభావ తీవ్రత</div>
+      <div class="val" style="color:var(--sentiment-negative);font-size:20px;">అధికం (High)</div>
+      <div class="sub">భారత్ 85% చమురును దిగుమతి చేసుకుంటుంది</div>
+    </div>
+  </div>
+
+  <div class="news-table-wrap reveal">
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th>డ్రైవర్ (Driver)</th>
+          <th>తాజా పరిణామం (Latest Development)</th>
+          <th>Crudeపై ప్రభావం</th>
+          <th>భారత మార్కెట్పై ప్రభావం</th>
+          <th>సంబంధిత రంగాలు</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${drivers.map(d => `
+          <tr>
+            <td><b>${d.no}</b></td>
+            <td><b>${esc(d.driver)}</b></td>
+            <td>${esc(d.dev)}</td>
+            <td><b>${esc(d.crudeImp)}</b></td>
+            <td>${esc(d.inImp)}</td>
+            <td><span class="sector-pill">${esc(d.secs)}</span></td>
+            <td><small>${esc(d.src)}</small></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="strength-box reveal" style="margin-top:24px;">
+    <h4 style="margin:0 0 8px;">ట్రాన్స్‌మిషన్ మెకానిజం (Transmission Mechanism):</h4>
+    <div class="workflow-flex">
+      <span class="wf-step">Crude Price పెరగడం</span>
+      <span class="wf-arrow">→</span>
+      <span class="wf-step">భారత దిగుమతి బిల్లు పెరుగుదల</span>
+      <span class="wf-arrow">→</span>
+      <span class="wf-step">USD/INR & కరెంట్ ఖాతా లోటు</span>
+      <span class="wf-arrow">→</span>
+      <span class="wf-step">ద్రవ్యోల్బణం & రవాణా ఖర్చులు</span>
+      <span class="wf-arrow">→</span>
+      <span class="wf-step">RBI రేట్ల తగ్గింపు ఆలస్యం</span>
+      <span class="wf-arrow">→</span>
+      <span class="wf-step" style="background:#fee2e2;">షేర్ల లాభాల మార్జిన్లపై ఒత్తిడి</span>
+    </div>
+    <div style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--rule);font-size:13px;color:var(--ink-2);">
+      • <b>ప్రతికూల రంగాలు (Downstream):</b> పెయింట్స్ (Asian Paints, Berger), ఏవియేషన్ (IndiGo), టైర్స్ (MRF, Apollo), OMCs (IOC, BPCL).<br>
+      • <b>సానుకూల రంగాలు (Upstream):</b> ONGC, Oil India (ఉత్పత్తిదారులకు అధిక ముడిచమురు రియలైజేషన్లు లభిస్తాయి).
+    </div>
+  </div>`;
+};

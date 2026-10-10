@@ -128,6 +128,54 @@ INDICATORS_CONFIG = [
         ),
         "impact_type": "medium",
     },
+    {
+        "id": "eurusd",
+        "name": "EUR/USD",
+        "symbol": "EURUSD=X",
+        "unit": "$",
+        "category": "కరెన్సీ",
+        "impact_te": (
+            "యూరో బలపడితే భారతీయ ఐటీ కంపెనీల యూరప్ ఆదాయాలకు సానుకూలం. "
+            "యూరప్ ఎగుమతులపై ఆధారపడే ఆటో మరియు ఫార్మా కంపెనీలకు కూడా అనుకూలం."
+        ),
+        "impact_type": "medium",
+    },
+    {
+        "id": "adr_hdfc",
+        "name": "HDFC Bank (ADR)",
+        "symbol": "HDB",
+        "unit": "$",
+        "category": "ADR",
+        "impact_te": "NYSE లో ట్రేడ్ అయ్యే HDFC బ్యాంక్ ADR కదలికలు మరుసటి రోజు భారత మార్కెట్ ఓపెనింగ్ సెంటిమెంట్‌ను సూచిస్తాయి.",
+        "impact_type": "high",
+    },
+    {
+        "id": "adr_icici",
+        "name": "ICICI Bank (ADR)",
+        "symbol": "IBN",
+        "unit": "$",
+        "category": "ADR",
+        "impact_te": "ICICI బ్యాంక్ ADR కదలికలు మరుసటి రోజు భారత బ్యాంకింగ్ రంగ సెంటిమెంట్‌ను సూచిస్తాయి.",
+        "impact_type": "high",
+    },
+    {
+        "id": "adr_infy",
+        "name": "Infosys (ADR)",
+        "symbol": "INFY",
+        "unit": "$",
+        "category": "ADR",
+        "impact_te": "Infosys ADR కదలికలు భారత ఐటీ రంగం (NIFTY IT) ట్రెండ్‌ను సూచిస్తాయి.",
+        "impact_type": "high",
+    },
+    {
+        "id": "adr_wipro",
+        "name": "Wipro (ADR)",
+        "symbol": "WIT",
+        "unit": "$",
+        "category": "ADR",
+        "impact_te": "Wipro ADR పనితీరు ఐటీ రంగం గ్లోబల్ డిమాండ్‌ను ప్రతిబింబిస్తుంది.",
+        "impact_type": "medium",
+    },
 ]
 
 # Major Market Indices

@@ -85,39 +85,32 @@ _SOURCE_DEFAULT = {
 BATCH_SIZE = 6
 MAX_ATTEMPTS = 3
 
-ITEM_SYSTEM = """నువ్వు ఒక సీనియర్ ఫైనాన్షియల్ న్యూస్ అనలిస్ట్ (Senior Financial News Analyst) మరియు "తెలుగు మార్కెట్ పల్స్" (Telugu Stock Market News Pulse) ప్రధాన సంపాదకుడివి.
+ITEM_SYSTEM = """నువ్వు ఒక సీనియర్ ఫైనాన్షియల్ న్యూస్ అనలిస్ట్ మరియు "తెలుగు మార్కెట్ పల్స్" (Telugu Stock Market News Pulse) ప్రధాన సంపాదకుడివి.
 
 ప్రధాన నిబంధనలు:
 1. ఈ వెబ్సైట్లో కేవలం Stock Marketకు సంబంధించిన వార్తలు మాత్రమే ఉండాలి.
-2. స్టాక్ మార్కెట్, కంపెనీ షేర్లు, రంగాలు, ఇన్వెస్టర్లు, లేదా మార్కెట్ కదలికలతో ప్రత్యక్ష లేదా పరోక్ష సంబంధం లేని వార్తలను (ఉదా: AI రీసెర్చ్, జనరల్ టెక్, సినిమాలు, క్రీడలు, వినోదం, క్రైమ్, సాధారణ రాజకీయాలు) పూర్తిగా తిరస్కరించాలి. అలాంటి వాటికి "importance": 1 మరియు "category": "other" కేటాయించు.
-3. ప్రపంచ వార్తలను కేవలం అవి భారతీయ లేదా ప్రపంచ మార్కెట్లను ఎలా ప్రభావితం చేస్తాయో (ఉదా: Tariffs, Crude Oil, Fed Rates, Bond Yields) స్పష్టమైన మార్కెట్ ప్రభావం ఉన్నప్పుడు మాత్రమే చేర్చు.
+2. స్టాక్ మార్కెట్, కంపెనీ షేర్లు లేదా మార్కెట్ కదలికలతో ప్రత్యక్ష/పరోక్ష సంబంధం లేని వార్తలను పూర్తిగా తిరస్కరించాలి ("importance": 1, "category": "other").
+3. ప్రపంచ వార్తలను అవి భారతీయ మార్కెట్లను ఎలా ప్రభావితం చేస్తాయో (ఉదా: Tariffs, Crude, Fed Rates) స్పష్టమైన మార్కెట్ ప్రభావం ఉన్నప్పుడు మాత్రమే చేర్చు.
 4. అన్ని వివరణలు, సారాంశాలు, శీర్షికలు, ప్రభావ విశ్లేషణలు తప్పనిసరిగా తెలుగులోనే రాయాలి.
-5. కంపెనీల అసలు పేర్లు, Stock Tickers (RELIANCE, TCS, INFY), NIFTY 50, BANKNIFTY, SENSEX, NSE, BSE, SEBI, RBI, FII, DII, GDP, CPI, IPO వంటి ప్రామాణిక పదాలను ఆంగ్లంలో ఉంచవచ్చు.
-6. సాంకేతిక పదాలు (FII, DII, Short Covering, Gap Up మొదలైనవి) మొదటిసారి వచ్చినప్పుడు సరళమైన తెలుగు అర్థం ఇవ్వాలి (ఉదా: Short Covering - గతంలో అమ్మిన షార్ట్ పొజిషన్లను తిరిగి కొనుగోలు చేయడం).
-7. ఖచ్చితమైన ధర లక్ష్యాలు (price targets) లేదా ట్రేడింగ్ సిఫార్సులు చేయకూడదు.
+5. కంపెనీల అసలు పేర్లు, Stock Tickers, NIFTY 50, FII, DII, IPO వంటి ప్రామాణిక పదాలను ఆంగ్లంలో ఉంచవచ్చు.
+6. సాంకేతిక పదాలు వచ్చినప్పుడు సరళమైన తెలుగు అర్థం ఇవ్వాలి.
 
 ప్రతి వార్తకు క్రింది JSON ఫీల్డ్స్ ఇవ్వాలి:
 - "id": ఇన్పుట్ ఐడీ
 - "title_te": ఆకర్షణీయమైన, స్పష్టమైన తెలుగు శీర్షిక
 - "summary_te": అసలు వార్తలో జరిగిన వాస్తవాన్ని వివరిస్తూ 1-2 స్పష్టమైన తెలుగు వాక్యాలు
 - "why_it_matters_te": ఇన్వెస్టర్లకు లేదా మార్కెట్కు ఇది ఎందుకు ముఖ్యమో తెలుగులో 1 వాక్యం
-- "category": కేవలం వీటిలో ఒకటి: indian_markets, stocks_in_news, global_markets, fii_dii, commodities_forex, earnings, ipo, economy, other
-- "sentiment": "positive" (సానుకూలం), "negative" (ప్రతికూలం), "neutral" (తటస్థం), లేదా "mixed" (మిశ్రమ ప్రభావం)
+- "category": indian_markets, stocks_in_news, global_markets, fii_dii, commodities_forex, earnings, ipo, economy, other
+- "sentiment": "positive", "negative", "neutral", లేదా "mixed"
 - "sentiment_label_te": "సానుకూలం", "ప్రతికూలం", "తటస్థం", లేదా "మిశ్రమ ప్రభావం"
-- "importance": పూర్ణాంకం 1 నుంచి 5 వరకు:
-    5 = మార్కెట్ను భారీగా కదిలించే కీలక వార్త (RBI రేట్ల మార్పు, బడ్జెట్, ప్రధాన కంపెనీల భారీ ఫలితాలు, యుద్ధం/ఆంక్షలు)
-    4 = చాలా ముఖ్యమైన వార్త, ఈ వారం తప్పక తెలుసుకోవాలి
-    3 = సాధారణ మార్కెట్ లేదా కంపెనీ వార్త
-    2 = చిన్న లేదా పరిమిత ప్రభావం కలిగిన వార్త
-    1 = మార్కెట్కు సంబంధం లేనిది / అనవసరమైనది (ఫిల్టర్ చేయబడుతుంది)
-- "affected_stocks": ప్రభావితమైన కంపెనీల టిక్కర్లు లేదా పేర్లు (ఉదా: ["RELIANCE", "TCS"])
-- "affected_sectors": ప్రభావిత రంగాలు (ఉదా: ["Banking", "IT", "Auto", "Pharma", "Energy"])
-- "market_impact_te": సాధ్యమైన మార్కెట్ ప్రభావం మరియు కారణం (తెలుగులో). ఒక రంగానికి లాభం, మరో రంగానికి నష్టం అయితే రెండింటినీ వివరించు.
-- "impact_horizon": "intraday", "short-term", "long-term", లేదా "uncertain"
-- "confidence": "high", "medium", లేదా "low"
-- "tags": గరిష్టంగా 4 చిన్న ట్యాగ్లు (ఉదా: ["nifty", "rbi", "repo-rate"])
+- "importance": 1 నుంచి 5 వరకు (5 = అత్యంత కీలకం, 1 = అనవసరం)
+- "news_strength": "Strong", "Moderate", లేదా "Weak" (వార్త యొక్క బలం)
+- "intraday_action": "WAIT", "WATCH", "UPSIDE SETUP", "DOWNSIDE SETUP", లేదా "AVOID NEWS-ONLY TRADE"
+- "affected_stocks": ప్రభావితమైన కంపెనీల టిక్కర్లు లేదా పేర్లు (ఉదా: ["RELIANCE"])
+- "affected_sectors": ప్రభావిత రంగాలు
+- "market_impact_te": సాధ్యమైన మార్కెట్ ప్రభావం మరియు కారణం (తెలుగులో).
 
-Reply with JSON: {"items": [{"id": "...", "title_te": "...", "summary_te": "...", "why_it_matters_te": "...", "category": "...", "sentiment": "positive", "sentiment_label_te": "సానుకూలం", "importance": 4, "affected_stocks": [...], "affected_sectors": [...], "market_impact_te": "...", "impact_horizon": "short-term", "confidence": "high", "tags": [...]}]}"""
+Reply with JSON: {"items": [{"id": "...", "title_te": "...", "summary_te": "...", "why_it_matters_te": "...", "category": "...", "sentiment": "positive", "sentiment_label_te": "సానుకూలం", "importance": 4, "news_strength": "Strong", "intraday_action": "WAIT", "affected_stocks": [...], "affected_sectors": [...], "market_impact_te": "..."}]}"""
 
 DAILY_SYSTEM = """నువ్వు 'తెలుగు మార్కెట్ పల్స్' ప్రధాన ఆర్థిక సంపాదకుడివి. గత 24 గంటల స్టాక్ మార్కెట్ పరిణామాల ఆధారంగా 'ఈరోజు మార్కెట్ డైలీ బ్రీఫింగ్' (Daily Market Brief) రాయాలి.
 భాష పూర్తిగా తెలుగులోనే ఉండాలి. సాంకేతిక పదాలు, టిక్కర్లు ఇంగ్లీష్లో ఉండవచ్చు.
@@ -354,6 +347,12 @@ def clean_ai(raw: dict) -> dict | None:
     if not isinstance(tags, list):
         tags = []
 
+    news_strength = str(raw.get("news_strength") or "Moderate").strip().title()
+    if news_strength not in ("Strong", "Moderate", "Weak"):
+        news_strength = "Moderate"
+
+    intraday_action = str(raw.get("intraday_action") or "WATCH").strip().upper()
+
     return {
         "title_te": title_te[:300],
         "summary": summary_te[:650],
@@ -364,6 +363,11 @@ def clean_ai(raw: dict) -> dict | None:
         "sentiment": sentiment,
         "sentiment_label_te": sentiment_label_te,
         "importance": importance,
+        "news_strength": news_strength,
+        "intraday_action": intraday_action,
+        "impact_horizon": horizon,
+        "confidence": confidence,
+        "tags": tags,
         "affected_stocks": stocks,
         "affected_sectors": sectors,
         "market_impact_te": market_impact_te[:500] or f"{sentiment_label_te} ప్రభావం చూపే అవకాశం ఉంది.",

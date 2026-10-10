@@ -694,3 +694,134 @@ main { max-width: var(--measure); margin: 0 auto; padding: 26px 24px 60px; outli
 .cal-card h3 { margin: 0 0 8px; font: 700 16px/1.3 var(--sans); color: var(--ink); }
 .cal-card .note { font: 400 13px/1.45 var(--sans); color: var(--ink-2); margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--rule); }
 
+
+/* --- Additional Financial Dashboard Components --- */
+.intraday-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font: 700 11px/1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.action-buy { background: #e6f7ec; color: #0d8239; border: 1px solid #a3e2b8; }
+.action-sell { background: #fde8e8; color: #c81e1e; border: 1px solid #f8b4b4; }
+.action-wait { background: #fef08a; color: #854d0e; border: 1px solid #facc15; }
+.action-watch { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+.action-avoid { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+.priority-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font: 700 11px var(--sans);
+  white-space: nowrap;
+}
+.pri-high { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.pri-med { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.pri-low { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+
+/* FII Chart & Cards */
+.fii-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+.fii-stat-card {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 16px;
+}
+.fii-stat-card .label { font: 500 12px var(--sans); color: var(--ink-2); text-transform: uppercase; margin-bottom: 6px; }
+.fii-stat-card .val { font: 800 24px/1.1 var(--mono); margin-bottom: 4px; }
+.fii-stat-card .sub { font: 400 12px var(--sans); color: var(--ink-3); }
+
+.fii-chart-box {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 18px;
+  margin: 20px 0;
+}
+.fii-chart-box h4 { margin: 0 0 12px; font: 700 14px var(--sans); color: var(--ink); }
+
+/* Market Strength Score */
+.strength-box {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 20px;
+  margin: 20px 0;
+}
+.strength-score-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.score-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 800 24px var(--mono);
+}
+.score-bearish { background: #fee2e2; color: #b91c1c; border: 3px solid #ef4444; }
+.score-bullish { background: #dcfce7; color: #15803d; border: 3px solid #22c55e; }
+.score-neutral { background: #fef9c3; color: #a16207; border: 3px solid #eab308; }
+
+/* Workflow Steps */
+.workflow-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+}
+.wf-step {
+  padding: 8px 14px;
+  background: var(--paper-1);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font: 600 12px var(--mono);
+  color: var(--ink);
+}
+.wf-arrow { color: var(--signal); font-weight: bold; }
+
+/* Filter pills and Search for Stocks Table */
+.table-ctrls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 16px 0 12px;
+}
+.table-ctrls input[type="search"] {
+  padding: 7px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--paper-1);
+  color: var(--ink);
+  font: 400 13px var(--sans);
+  min-width: 220px;
+}
+.pill-btn {
+  padding: 5px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  color: var(--ink-2);
+  font: 600 12px var(--sans);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pill-btn:hover, .pill-btn.active {
+  background: var(--ink);
+  color: var(--paper-1);
+  border-color: var(--ink);
+}

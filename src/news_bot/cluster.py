@@ -163,6 +163,8 @@ def make_story(members: list[dict]) -> dict:
         "why": ai.get("why_it_matters_te") or ai.get("why", ""),
         "why_it_matters_te": ai.get("why_it_matters_te") or ai.get("why", ""),
         "market_impact_te": ai.get("market_impact_te", ""),
+        "news_strength": ai.get("news_strength", "Moderate"),
+        "intraday_action": ai.get("intraday_action", "WATCH"),
         "impact_horizon": ai.get("impact_horizon", "short-term"),
         "confidence": ai.get("confidence", "medium"),
         "affected_stocks": ai.get("affected_stocks", []),
