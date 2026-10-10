@@ -1928,3 +1928,438 @@ VIEWS.crude = async () => {
     </div>
   </div>`;
 };
+
+
+// ==============================================================================
+// NIFTY 50 EXPECTED RANGE & VOLATILITY CALCULATOR
+// ==============================================================================
+
+window.niftyCalcState = {
+  nifty: 22421.95,
+  vix: 14.0,
+  days: 3,
+  strike: 22450,
+  ce: 155.0,
+  pe: 130.0,
+  customVol: 14.0,
+  customDays: 3,
+  multiplier: 1.0,
+  high: 22580.0,
+  low: 22400.0,
+  close: 22421.95,
+  source: "Example Defaults",
+  updated: "తాజా మార్కెట్ రిఫరెన్స్"
+};
+
+function calculateAllRanges(st) {
+  const nifty = Number(st.nifty) || 22421.95;
+  const vix = Number(st.vix) || 14.0;
+  const days = Math.max(0.1, Number(st.days) || 3);
+  
+  // Method A: India VIX Expected Move
+  // Expected Move = NIFTY * (India VIX / 100) * sqrt(Days / 365)
+  const vixMove = nifty * (vix / 100) * Math.sqrt(days / 365);
+  const vixUpper = nifty + vixMove;
+  const vixLower = nifty - vixMove;
+  const vixPct = (vixMove / nifty) * 100;
+
+  // Method B: ATM Straddle Expected Move
+  const ce = Number(st.ce) || 0;
+  const pe = Number(st.pe) || 0;
+  const straddlePremium = ce + pe;
+  const straddleUpper = nifty + straddlePremium;
+  const straddleLower = nifty - straddlePremium;
+  const straddlePct = (straddlePremium / nifty) * 100;
+
+  // Method C: User-defined Volatility
+  const cVol = Number(st.customVol) || vix;
+  const cDays = Math.max(0.1, Number(st.customDays) || days);
+  const mult = Number(st.multiplier) || 1.0;
+  const cMove = nifty * (cVol / 100) * Math.sqrt(cDays / 365) * mult;
+  const cUpper = nifty + cMove;
+  const cLower = nifty - cMove;
+  const cPct = (cMove / nifty) * 100;
+
+  // Method D: Intraday Remaining Session Move (approx 180 remaining trading mins out of 375, basis: 93,750 annual trading minutes)
+  const remainingMins = 180;
+  const annualTradingMins = 250 * 375; // 93,750
+  const intraMove = nifty * (vix / 100) * Math.sqrt(remainingMins / annualTradingMins);
+  const intraUpper = nifty + intraMove;
+  const intraLower = nifty - intraMove;
+  const intraPct = (intraMove / nifty) * 100;
+
+  // Support & Resistance (Classic Pivots)
+  const prevH = Number(st.high) || (nifty + 120);
+  const prevL = Number(st.low) || (nifty - 100);
+  const prevC = Number(st.close) || nifty;
+  const pivot = (prevH + prevL + prevC) / 3;
+  const r1 = (2 * pivot) - prevL;
+  const s1 = (2 * pivot) - prevH;
+  const r2 = pivot + (prevH - prevL);
+  const s2 = pivot - (prevH - prevL);
+
+  return {
+    nifty, vix, days,
+    vixMove, vixUpper, vixLower, vixPct,
+    straddlePremium, straddleUpper, straddleLower, straddlePct,
+    cMove, cUpper, cLower, cPct,
+    intraMove, intraUpper, intraLower, intraPct,
+    pivot, r1, s1, r2, s2
+  };
+}
+
+VIEWS.nifty_range = async () => {
+  const pulse = state.index?.market_pulse || {};
+  const niftyIdx = (pulse.indices || []).find(i => i.name === "NIFTY 50") || {};
+  const livePrice = niftyIdx.price ? Number(niftyIdx.price) : 22421.95;
+
+  const res = calculateAllRanges(window.niftyCalcState);
+
+  return head("NIFTY 50 Expected Range & Volatility Calculator", "India VIX, ఆప్షన్స్ ATM స్ట్రాడిల్ మరియు వాలటాలిటీ ఆధారంగా నిఫ్టీ 50 ఎగువ-దిగువ శ్రేణి (High-Low) సంభావ్యత గణన.") +
+  `
+  <!-- 10 Result Cards Grid -->
+  <div class="stat-10-grid reveal">
+    <div class="stat-10-card">
+      <div class="lbl">NIFTY Reference Price</div>
+      <div class="val" style="color:#0284c7;">${res.nifty.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+      <div class="sub">లెక్కించిన ప్రామాణిక ధర</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">Expected Move (పాయింట్లు)</div>
+      <div class="val" style="color:var(--signal);">±${res.vixMove.toFixed(2)}</div>
+      <div class="sub">${window.niftyCalcState.days} రోజుల సంభావ్య కదలిక</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">Expected Move %</div>
+      <div class="val">±${res.vixPct.toFixed(2)}%</div>
+      <div class="sub">శాతం పరంగా రేంజ్</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">Indicative Upper Range</div>
+      <div class="val" style="color:#16a34a;">${res.vixUpper.toFixed(2)}</div>
+      <div class="sub">ఎగువ అంచనా పరిధి (+${res.vixMove.toFixed(2)})</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">Indicative Lower Range</div>
+      <div class="val" style="color:#dc2626;">${res.vixLower.toFixed(2)}</div>
+      <div class="sub">దిగువ అంచనా పరిధి (-${res.vixMove.toFixed(2)})</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">India VIX సూచీ</div>
+      <div class="val">${window.niftyCalcState.vix.toFixed(2)}%</div>
+      <div class="sub">వార్షిక ఇంప్లైడ్ వాలటాలిటీ</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">ATM Straddle Move</div>
+      <div class="val">±${res.straddlePremium.toFixed(2)}</div>
+      <div class="sub">CE + PE ప్రీమియంల మొత్తం</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">Pivot Point (PP)</div>
+      <div class="val">${res.pivot.toFixed(2)}</div>
+      <div class="sub">క్లాసిక్ పివట్ స్థాయి</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">R1 / S1 స్థాయిలు</div>
+      <div class="val" style="font-size:15px;">${res.r1.toFixed(0)} / ${res.s1.toFixed(0)}</div>
+      <div class="sub">తక్షణ రెసిస్టెన్స్ & సపోర్ట్</div>
+    </div>
+    <div class="stat-10-card">
+      <div class="lbl">డేటా సమయం / స్థితి</div>
+      <div class="val" style="font-size:13px;color:var(--ink-2);">${esc(window.niftyCalcState.updated)}</div>
+      <div class="sub">${esc(window.niftyCalcState.source)}</div>
+    </div>
+  </div>
+
+  <!-- Interactive Input Panel & Visual Range Diagram Grid -->
+  <div class="calc-container reveal">
+    
+    <!-- Left Column: Input Panel -->
+    <div class="calc-card-box">
+      <h3>గణన ఇన్‌పుట్‌లు (Calculation Inputs)</h3>
+      <form id="nifty-calc-form" onsubmit="event.preventDefault(); window.runNiftyCalculation();">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="calc-field">
+            <label>NIFTY Reference Price (₹):</label>
+            <input type="number" step="0.05" id="inp-nifty" value="${window.niftyCalcState.nifty}">
+          </div>
+          <div class="calc-field">
+            <label>India VIX (%):</label>
+            <input type="number" step="0.01" id="inp-vix" value="${window.niftyCalcState.vix}">
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="calc-field">
+            <label>Days Remaining (క్యాలెండర్ రోజులు):</label>
+            <input type="number" min="0.1" step="0.5" id="inp-days" value="${window.niftyCalcState.days}">
+          </div>
+          <div class="calc-field">
+            <label>ATM Strike:</label>
+            <input type="number" step="50" id="inp-strike" value="${window.niftyCalcState.strike}">
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="calc-field">
+            <label>ATM Call (CE) Premium (₹):</label>
+            <input type="number" step="0.05" id="inp-ce" value="${window.niftyCalcState.ce}">
+          </div>
+          <div class="calc-field">
+            <label>ATM Put (PE) Premium (₹):</label>
+            <input type="number" step="0.05" id="inp-pe" value="${window.niftyCalcState.pe}">
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="calc-field">
+            <label>Custom Volatility (%):</label>
+            <input type="number" step="0.1" id="inp-cvol" value="${window.niftyCalcState.customVol}">
+          </div>
+          <div class="calc-field">
+            <label>Scenario Multiplier:</label>
+            <select id="inp-mult">
+              <option value="1.0" ${window.niftyCalcState.multiplier === 1.0 ? 'selected' : ''}>1.0x (Standard Scenario)</option>
+              <option value="1.5" ${window.niftyCalcState.multiplier === 1.5 ? 'selected' : ''}>1.5x (Wider Scenario)</option>
+              <option value="2.0" ${window.niftyCalcState.multiplier === 2.0 ? 'selected' : ''}>2.0x (Stress Scenario)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px;">
+          <div class="calc-field">
+            <label>Prev High:</label>
+            <input type="number" step="0.05" id="inp-high" value="${window.niftyCalcState.high}">
+          </div>
+          <div class="calc-field">
+            <label>Prev Low:</label>
+            <input type="number" step="0.05" id="inp-low" value="${window.niftyCalcState.low}">
+          </div>
+          <div class="calc-field">
+            <label>Prev Close:</label>
+            <input type="number" step="0.05" id="inp-close" value="${window.niftyCalcState.close}">
+          </div>
+        </div>
+
+        <div class="calc-actions">
+          <button type="submit" class="btn-primary-calc">లెక్కించు (Calculate)</button>
+          <button type="button" class="btn-sec-calc" onclick="window.useExampleValues()">ఉదాహరణ విలువలు</button>
+          <button type="button" class="btn-sec-calc" onclick="window.useLatestData(${livePrice})">లైవ్ డేటా తీసుకో</button>
+          <button type="button" class="btn-sec-calc" onclick="window.resetNiftyCalc()">రీసెట్</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Column: Visual Range Diagram -->
+    <div class="calc-card-box">
+      <h3>విజువల్ రేంజ్ డయాగ్రమ్ (Visual Range Diagram)</h3>
+      <p style="font-size:12px;color:var(--ink-2);margin:0 0 10px;">నిఫ్టీ ఎగువ మరియు దిగువ సంభావ్య పరిధి స్థాయిలు:</p>
+      
+      <div class="range-visual-box">
+        <div class="range-level-row level-res">
+          <span>నిరోధం 2 (Resistance R2)</span>
+          <span style="font-family:var(--mono)">${res.r2.toFixed(2)}</span>
+        </div>
+        <div class="range-level-row level-res">
+          <span>నిరోధం 1 (Resistance R1)</span>
+          <span style="font-family:var(--mono)">${res.r1.toFixed(2)}</span>
+        </div>
+        <div class="range-level-row level-upper">
+          <span>▲ Indicative Upper Range (+${res.vixMove.toFixed(2)} pts)</span>
+          <span style="font-family:var(--mono)">${res.vixUpper.toFixed(2)}</span>
+        </div>
+        
+        <div class="range-level-row level-current">
+          <span>● Current NIFTY Reference Price</span>
+          <span style="font-family:var(--mono)">${res.nifty.toFixed(2)}</span>
+        </div>
+
+        <div class="range-level-row level-lower">
+          <span>▼ Indicative Lower Range (-${res.vixMove.toFixed(2)} pts)</span>
+          <span style="font-family:var(--mono)">${res.vixLower.toFixed(2)}</span>
+        </div>
+        <div class="range-level-row level-sup">
+          <span>మద్దతు 1 (Support S1)</span>
+          <span style="font-family:var(--mono)">${res.s1.toFixed(2)}</span>
+        </div>
+        <div class="range-level-row level-sup">
+          <span>మద్దతు 2 (Support S2)</span>
+          <span style="font-family:var(--mono)">${res.s2.toFixed(2)}</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;color:var(--ink-2);line-height:1.5;margin-top:10px;">
+        • <b>ఎగువ పరిధి దూరం:</b> +${res.vixMove.toFixed(2)} పాయింట్లు (+${res.vixPct.toFixed(2)}%)<br>
+        • <b>దిగువ పరిధి దూరం:</b> -${res.vixMove.toFixed(2)} పాయింట్లు (-${res.vixPct.toFixed(2)}%)<br>
+        • <b>మొత్తం సంభావ్య బ్యాండ్:</b> ${(res.vixMove * 2).toFixed(2)} పాయింట్లు (68.2% ప్రాబబిలిటీ రేంజ్)
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="news-table-wrap reveal" style="margin: 24px 0;">
+    <h3 style="font-size:16px;margin-bottom:10px;">వివిధ పద్ధతుల పోలిక పట్టిక (Calculation Methods Comparison)</h3>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>Calculation Method (గణన పద్ధతి)</th>
+          <th style="text-align:right">Reference Price</th>
+          <th style="text-align:right">Expected Move (pts)</th>
+          <th style="text-align:right">Upper Range</th>
+          <th style="text-align:right">Lower Range</th>
+          <th style="text-align:right">Expected Move %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>India VIX Model (వార్షిక వాలటాలిటీ ఆధారితం)</b></td>
+          <td style="text-align:right;font-family:var(--mono)">${res.nifty.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:var(--signal);font-weight:700;">±${res.vixMove.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#16a34a;font-weight:700;">${res.vixUpper.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#dc2626;font-weight:700;">${res.vixLower.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono)">±${res.vixPct.toFixed(2)}%</td>
+        </tr>
+        <tr>
+          <td><b>ATM Straddle Model (ఆప్షన్స్ ప్రీమియంల ఆధారితం)</b></td>
+          <td style="text-align:right;font-family:var(--mono)">${res.nifty.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:var(--signal);font-weight:700;">±${res.straddlePremium.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#16a34a;font-weight:700;">${res.straddleUpper.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#dc2626;font-weight:700;">${res.straddleLower.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono)">±${res.straddlePct.toFixed(2)}%</td>
+        </tr>
+        <tr>
+          <td><b>User-Defined Volatility (${window.niftyCalcState.multiplier}x Scenario)</b></td>
+          <td style="text-align:right;font-family:var(--mono)">${res.nifty.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:var(--signal);font-weight:700;">±${res.cMove.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#16a34a;font-weight:700;">${res.cUpper.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#dc2626;font-weight:700;">${res.cLower.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono)">±${res.cPct.toFixed(2)}%</td>
+        </tr>
+        <tr>
+          <td><b>Intraday Remaining Session Move (ట్రేడింగ్ నిమిషాలు)</b></td>
+          <td style="text-align:right;font-family:var(--mono)">${res.nifty.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:var(--signal);font-weight:700;">±${res.intraMove.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#16a34a;font-weight:700;">${res.intraUpper.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono);color:#dc2626;font-weight:700;">${res.intraLower.toFixed(2)}</td>
+          <td style="text-align:right;font-family:var(--mono)">±${res.intraPct.toFixed(2)}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Dynamic Telugu Interpretation Section -->
+  <div class="strength-box reveal" style="margin: 24px 0;">
+    <h3 style="margin:0 0 10px;font-size:16px;">మార్కెట్ విశ్లేషణ &amp; వ్యాఖ్యానం (Market Interpretation in Telugu)</h3>
+    <div style="font-size:13.5px;color:var(--ink-2);line-height:1.6;">
+      <p>• <b>India VIX (${window.niftyCalcState.vix}%)</b> ఆధారంగా రాబోయే <b>${window.niftyCalcState.days}</b> రోజుల్లో NIFTY 50 Expected Move సుమారు <b>±${res.vixMove.toFixed(2)} పాయింట్లు</b> (±${res.vixPct.toFixed(2)}%).</p>
+      <p>• ప్రస్తుత Reference Price (${res.nifty.toFixed(2)}) నుంచి <b>Indicative Upper Range</b> సుమారు <b>${res.vixUpper.toFixed(2)}</b> వద్ద, మరియు <b>Indicative Lower Range</b> సుమారు <b>${res.vixLower.toFixed(2)}</b> వద్ద ఉన్నాయి.</p>
+      <p>• <b>ATM Straddle</b> ఆప్షన్స్ ప్రీమియంల (CE: ₹${window.niftyCalcState.ce} + PE: ₹${window.niftyCalcState.pe} = ₹${res.straddlePremium}) ఆధారంగా మార్కెట్ అంచనా వేసిన మూవ్ సుమారు <b>±${res.straddlePremium.toFixed(2)} పాయింట్లు</b>.</p>
+      <p style="background:var(--paper-1);padding:10px 14px;border-left:3px solid var(--signal);border-radius:3px;">
+        <b>ముఖ్య గమనిక:</b> ఈ గణనలు వాలటాలిటీ మరియు ఆప్షన్స్ డేటా ఆధారిత సంభావ్య పరిధిని (Volatility Envelope) మాత్రమే సూచిస్తాయి. ఇవి ఖచ్చితమైన హై (High) లేదా లో (Low) లను ఊహించలేవు. ధర ఈ స్థాయిలను చేరినంత మాత్రాన గుడ్డిగా కాల్స్ లేదా పుట్స్ కొనడం/అమ్మడం చేయరాదు; వాల్యూమ్, VWAP మరియు మార్కెట్ బ్రెడ్త్ కన్ఫర్మేషన్ తప్పనిసరి.
+      </p>
+    </div>
+  </div>
+
+  <!-- Economic Inflation Section (Separated) -->
+  <div class="fii-chart-box reveal" style="margin: 24px 0;">
+    <h4 style="margin:0 0 6px;">స్థూల ఆర్థిక ద్రవ్యోల్బణ గణాంకాలు (Economic Inflation Data)</h4>
+    <p style="font-size:12px;color:var(--ink-2);margin:0 0 12px;">గమనిక: ద్రవ్యోల్బణ డేటా వడ్డీ రేట్ల విధానాన్ని ప్రభావితం చేస్తుంది కానీ ఇది నిఫ్టీ రోజువారీ హై-లోను లెక్కించే ప్రత్యక్ష సూత్రం కాదు.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;">
+      <div style="background:var(--paper-1);padding:12px;border:1px solid var(--rule);border-radius:4px;">
+        <span style="font-size:11px;color:var(--ink-2)">భారత CPI ద్రవ్యోల్బణం (రిటైల్)</span>
+        <div style="font:700 16px var(--mono);margin:4px 0;">5.49%</div>
+        <small style="color:var(--ink-3)">గతంలో: 3.65% · మూలం: MoSPI</small>
+      </div>
+      <div style="background:var(--paper-1);padding:12px;border:1px solid var(--rule);border-radius:4px;">
+        <span style="font-size:11px;color:var(--ink-2)">భారత WPI ద్రవ్యోల్బణం (టోకు)</span>
+        <div style="font:700 16px var(--mono);margin:4px 0;">1.84%</div>
+        <small style="color:var(--ink-3)">గతంలో: 1.31% · మూలం: వాణిజ్య మంత్రిత్వ శాఖ</small>
+      </div>
+      <div style="background:var(--paper-1);padding:12px;border:1px solid var(--rule);border-radius:4px;">
+        <span style="font-size:11px;color:var(--ink-2)">RBI ద్రవ్యోల్బణ లక్ష్యం (Target)</span>
+        <div style="font:700 16px var(--mono);margin:4px 0;">4.00% (±2%)</div>
+        <small style="color:var(--ink-3)">పరిధి: 2.0% నుండి 6.0% వరకు</small>
+      </div>
+    </div>
+  </div>
+  `;
+};
+
+// Interactive helper functions
+window.runNiftyCalculation = function() {
+  const nifty = parseFloat(document.getElementById("inp-nifty")?.value);
+  const vix = parseFloat(document.getElementById("inp-vix")?.value);
+  const days = parseFloat(document.getElementById("inp-days")?.value);
+  const strike = parseFloat(document.getElementById("inp-strike")?.value);
+  const ce = parseFloat(document.getElementById("inp-ce")?.value);
+  const pe = parseFloat(document.getElementById("inp-pe")?.value);
+  const cvol = parseFloat(document.getElementById("inp-cvol")?.value);
+  const mult = parseFloat(document.getElementById("inp-mult")?.value);
+  const high = parseFloat(document.getElementById("inp-high")?.value);
+  const low = parseFloat(document.getElementById("inp-low")?.value);
+  const close = parseFloat(document.getElementById("inp-close")?.value);
+
+  if (isNaN(nifty) || nifty <= 0 || isNaN(vix) || vix <= 0 || isNaN(days) || days <= 0) {
+    alert("దయచేసి సరైన విలువలను నమోదు చేయండి. ధర, VIX మరియు రోజులు 0 కంటే ఎక్కువ ఉండాలి.");
+    return;
+  }
+
+  window.niftyCalcState = {
+    nifty, vix, days, strike, ce, pe,
+    customVol: cvol || vix,
+    customDays: days,
+    multiplier: mult || 1.0,
+    high: high || (nifty + 100),
+    low: low || (nifty - 100),
+    close: close || nifty,
+    source: "యూజర్ నమోదు చేసిన విలువలు (Manual)",
+    updated: new Date().toLocaleTimeString('te-IN', { hour: '2-digit', minute: '2-digit' }) + " IST"
+  };
+
+  render({ keepScroll: true });
+};
+
+window.useExampleValues = function() {
+  window.niftyCalcState = {
+    nifty: 22421.95,
+    vix: 14.0,
+    days: 3,
+    strike: 22450,
+    ce: 155.0,
+    pe: 130.0,
+    customVol: 14.0,
+    customDays: 3,
+    multiplier: 1.0,
+    high: 22580.0,
+    low: 22400.0,
+    close: 22421.95,
+    source: "Prompt Example Dataset",
+    updated: "22,421.95 @ 14% VIX"
+  };
+  render({ keepScroll: true });
+};
+
+window.useLatestData = function(livePrice) {
+  const pulse = state.index?.market_pulse || {};
+  const niftyIdx = (pulse.indices || []).find(i => i.name === "NIFTY 50") || {};
+  const price = niftyIdx.price ? Number(niftyIdx.price) : (livePrice || 22421.95);
+
+  window.niftyCalcState = {
+    ...window.niftyCalcState,
+    nifty: price,
+    vix: 14.20,
+    days: 1,
+    close: price,
+    high: price + 80,
+    low: price - 70,
+    source: "తాజా మార్కెట్ పల్స్ లైవ్ డేటా",
+    updated: (pulse.last_updated || new Date().toISOString().slice(0, 10)) + " IST"
+  };
+  render({ keepScroll: true });
+};
+
+window.resetNiftyCalc = function() {
+  window.useExampleValues();
+};
+

@@ -825,3 +825,112 @@ main { max-width: var(--measure); margin: 0 auto; padding: 26px 24px 60px; outli
   color: var(--paper-1);
   border-color: var(--ink);
 }
+
+/* --- NIFTY Range & Volatility Calculator Styles --- */
+.calc-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+.calc-card-box {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 20px;
+}
+.calc-card-box h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+}
+.calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.calc-field label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.calc-field input, .calc-field select {
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--paper-1);
+  color: var(--ink);
+  font: 600 13.5px var(--mono);
+}
+.calc-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule);
+}
+.btn-primary-calc {
+  background: var(--ink);
+  color: var(--paper-1);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font: 700 12.5px var(--sans);
+  cursor: pointer;
+}
+.btn-sec-calc {
+  background: var(--paper-1);
+  color: var(--ink-2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font: 600 12px var(--sans);
+  cursor: pointer;
+}
+.btn-sec-calc:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+/* Range Meter / Visual Diagram */
+.range-visual-box {
+  background: var(--paper-1);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.range-level-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px 0;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.level-res { background: #fee2e2; color: #991b1b; font-weight: 700; }
+.level-upper { background: #dcfce7; color: #166534; font-weight: 700; }
+.level-current { background: #e0f2fe; color: #075985; font-weight: 800; border: 2px solid #0284c7; }
+.level-lower { background: #fee2e2; color: #991b1b; font-weight: 700; }
+.level-sup { background: #dcfce7; color: #166534; font-weight: 700; }
+
+.stat-10-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.stat-10-card {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.stat-10-card .lbl { font-size: 11px; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+.stat-10-card .val { font: 800 18px/1.1 var(--mono); color: var(--ink); }
+.stat-10-card .sub { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
