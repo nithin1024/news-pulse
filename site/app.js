@@ -805,10 +805,15 @@ VIEWS.indian_markets = async (params) =>
 
 VIEWS.stocks_in_news = async (params) => {
   const week = await loadRange(Number(params.range) || 7);
-  const feedHtml = await genericFeedView(params, { filter: (s) => s.category === "stocks_in_news" || (s.affected_stocks?.length > 0), hideCategories: true });
+  const feedHtml = await genericFeedView(params, {
+    filter: (s) => s.category === "stocks_in_news" || (s.affected_stocks && s.affected_stocks.length > 0) || s.category === "earnings",
+    hideCategories: true
+  });
   return head("Stocks in News", "కీలక వార్తలు కలిగిన కంపెనీలు, షేర్ల కదలికలు, కార్పొరేట్ ప్రకటనలు మరియు స్వల్పకాలిక/దీర్ఘకాలిక ప్రభావం.") +
     feedHtml +
-    renderStocksInNewsFinalTable(week);
+    `<div style="margin-top: 48px; border-top: 2px solid var(--rule); padding-top: 24px;">
+      ${renderStocksInNewsFinalTable(week)}
+    </div>`;
 };
 
 VIEWS.global_markets = async (params) =>
