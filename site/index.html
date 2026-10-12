@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>తెలుగు మార్కెట్ పల్స్ | Telugu Market Pulse</title>
-  <meta name="description" content="భారతీయ మరియు ప్రపంచ స్టాక్ మార్కెట్ వార్తలు, NIFTY 50, SENSEX, Stocks in News, FII/DII డేటా, కమోడిటీలు, IPOలు మరియు మార్కెట్ ప్రభావ విశ్లేషణ పూర్తిగా తెలుగులో.">
+  <meta name="description" content="స్టాక్ మార్కెట్కు సంబంధించిన తాజా వార్తలు — సులభమైన తెలుగులో. భారతీయ మరియు ప్రపంచ స్టాక్ మార్కెట్, NIFTY 50, SENSEX, Stocks in News, FII/DII డేటా, కమోడిటీలు, క్రూడ్ ఆయిల్, మరియు సమగ్ర మార్కెట్ విశ్లేషణ.">
   <meta name="theme-color" id="theme-color" content="#f4efe6">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..600&family=Schibsted+Grotesk:wght@400..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..600&family=Schibsted+Grotesk:wght@400..700&display=swap">
   <link rel="stylesheet" href="palettes.css">
   <link rel="stylesheet" href="style.css">
   <script>
@@ -30,56 +33,172 @@
 <body>
   <a class="skip" href="#view">వార్తలకు వెళ్ళండి</a>
 
+  <!-- Top Realtime Market Ticker -->
   <div class="ticker" aria-label="తాజా మార్కెట్ హెడ్లైన్స్">
-    <span class="ticker-label"><i class="beat" aria-hidden="true"></i>తాజా మార్కెట్</span>
+    <span class="ticker-label"><i class="beat" aria-hidden="true"></i>లైవ్ మార్కెట్</span>
     <div class="ticker-window"><div class="ticker-track" id="ticker"></div></div>
   </div>
 
+  <!-- Left Side Accessible Navigation Drawer (Phase 6) -->
+  <div id="drawer-backdrop" aria-hidden="true"></div>
+  <aside id="nav-drawer" role="dialog" aria-modal="true" aria-label="ముఖ్య విభాగాలు" aria-hidden="true">
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-title">తెలుగు మార్కెట్ పల్స్</div>
+        <div class="drawer-subtitle">18 విభాగాలు · నావిగేషన్ మెనూ</div>
+      </div>
+      <button type="button" class="drawer-close" id="drawer-close" aria-label="మెనూ మూసివేయండి">✕</button>
+    </div>
+    <nav class="drawer-nav" id="drawer-nav" aria-label="ప్రధాన లింకులు">
+      <a href="#/home" class="drawer-link active" data-route="home">
+        <span class="drawer-num">1</span>
+        <span>హోమ్ (Home Dashboard)</span>
+        <span class="drawer-tag">సమగ్రం</span>
+      </a>
+      <a href="#/today" class="drawer-link" data-route="today">
+        <span class="drawer-num">2</span>
+        <span>ఈరోజు ముఖ్యమైన వార్తలు</span>
+        <span class="drawer-tag">24 గంటలు</span>
+      </a>
+      <a href="#/top15" class="drawer-link" data-route="top15">
+        <span class="drawer-num">3</span>
+        <span>మార్కెట్ ప్రారంభానికి ముందు 15 విషయాలు</span>
+        <span class="drawer-tag">Top 15</span>
+      </a>
+      <a href="#/indian_markets" class="drawer-link" data-route="indian_markets">
+        <span class="drawer-num">4</span>
+        <span>భారత మార్కెట్ (NIFTY & SENSEX)</span>
+      </a>
+      <a href="#/global_markets" class="drawer-link" data-route="global_markets">
+        <span class="drawer-num">5</span>
+        <span>ప్రపంచ మార్కెట్లు (Global Markets)</span>
+      </a>
+      <a href="#/stocks_in_news" class="drawer-link" data-route="stocks_in_news">
+        <span class="drawer-num">6</span>
+        <span>Stocks in News</span>
+        <span class="drawer-tag">కంపెనీలు</span>
+      </a>
+      <a href="#/sector" class="drawer-link" data-route="sector">
+        <span class="drawer-num">7</span>
+        <span>Sector-wise News (14 రంగాలు)</span>
+      </a>
+      <a href="#/positive" class="drawer-link" data-route="positive">
+        <span class="drawer-num">8</span>
+        <span>Positive News (సానుకూల వార్తలు)</span>
+        <span class="drawer-tag" style="color:#16a34a;">🟢</span>
+      </a>
+      <a href="#/negative" class="drawer-link" data-route="negative">
+        <span class="drawer-num">9</span>
+        <span>Negative News (రిస్క్ పరిణామాలు)</span>
+        <span class="drawer-tag" style="color:#dc2626;">🔴</span>
+      </a>
+      <a href="#/strength" class="drawer-link" data-route="strength">
+        <span class="drawer-num">10</span>
+        <span>Market Strength (మార్కెట్ బలం)</span>
+        <span class="drawer-tag">స్కోరు</span>
+      </a>
+      <a href="#/fii_dii" class="drawer-link" data-route="fii_dii">
+        <span class="drawer-num">11</span>
+        <span>FII / DII ప్రవాహాలు & F&O షార్ట్స్</span>
+      </a>
+      <a href="#/crude" class="drawer-link" data-route="crude">
+        <span class="drawer-num">12</span>
+        <span>Crude Oil (8 Price Drivers)</span>
+        <span class="drawer-tag">చమురు</span>
+      </a>
+      <a href="#/commodities" class="drawer-link" data-route="commodities">
+        <span class="drawer-num">13</span>
+        <span>Currency & Commodities (బంగారం, డాలర్)</span>
+      </a>
+      <a href="#/earnings" class="drawer-link" data-route="earnings">
+        <span class="drawer-num">14</span>
+        <span>Earnings & Corporate Actions (ఫలితాలు)</span>
+      </a>
+      <a href="#/ipo" class="drawer-link" data-route="ipo">
+        <span class="drawer-num">15</span>
+        <span>IPO News (ప్రైమరీ మార్కెట్)</span>
+      </a>
+      <a href="#/calendar" class="drawer-link" data-route="calendar">
+        <span class="drawer-num">16</span>
+        <span>Economic Calendar (ఆర్థిక క్యాలెండర్)</span>
+        <span class="drawer-tag">IST టైమింగ్స్</span>
+      </a>
+      <a href="#/adr" class="drawer-link" data-route="adr">
+        <span class="drawer-num">17</span>
+        <span>Indian ADRs (అమెరికాలో భారత షేర్లు)</span>
+      </a>
+      <a href="#/sources" class="drawer-link" data-route="sources">
+        <span class="drawer-num">18</span>
+        <span>News Sources & Health (మూలాలు)</span>
+      </a>
+    </nav>
+    <div class="drawer-footer">
+      <div>రోలింగ్ 24 గంటల స్టాక్ మార్కెట్ వార్తలు మాత్రమే</div>
+      <div style="font-size:10px;color:var(--ink-3);margin-top:2px;">సమయాలు: IST (భారత ప్రామాణిక సమయం)</div>
+    </div>
+  </aside>
+
+  <!-- Masthead -->
   <header class="masthead">
     <div class="mast-meta">
-      <span id="dateline"></span>
-      <span id="edition" class="edition"></span>
+      <span id="dateline">భారత ప్రామాణిక సమయం (IST)</span>
+      <span class="retention-pill" title="గత 24 గంటల్లో ప్రచురితమైన తాజా వార్తలు మాత్రమే చూపిస్తాము">
+        <span class="retention-pulse"></span> రోలింగ్ 24 గంటల లైవ్ కవరేజ్
+      </span>
+      <span id="edition" class="edition">లైవ్ ఎడిషన్</span>
     </div>
-    <a class="wordmark" href="#/today" aria-label="తెలుగు మార్కెట్ పల్స్ — ముఖ్యాంశాలు">
+    <a class="wordmark" href="#/home" aria-label="తెలుగు మార్కెట్ పల్స్ — ముఖ్యాంశాలు">
       <span>తెలుగు</span>
       <span id="mast-pulse" class="pulse-slot"></span>
       <span>మార్కెట్ పల్స్</span>
     </a>
-    <p class="motto">భారతీయ మరియు ప్రపంచ స్టాక్ మార్కెట్ సమగ్ర విశ్లేషణ · ప్రతి రెండు గంటలకు తాజా నవీకరణ</p>
+    <p class="motto">స్టాక్ మార్కెట్కు సంబంధించిన తాజా వార్తలు — సులభమైన తెలుగులో</p>
   </header>
 
+  <!-- Sticky Compact Header Bar with Hamburger Button (Phase 6) -->
   <nav class="sections" id="nav" aria-label="విభాగాలు">
-    <a class="mini-mark" href="#/today" aria-hidden="true" tabindex="-1">మార్కెట్&nbsp;పల్స్</a>
-    <div class="section-links">
+    <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="మెనూ తెరవండి" aria-expanded="false" aria-controls="nav-drawer">
+      <div class="bars">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <span>మెనూ</span>
+    </button>
+    <a class="mini-mark" href="#/home" aria-label="హోమ్ పేజీ">మార్కెట్&nbsp;పల్స్</a>
+    
+    <div class="section-links" style="align-items:center;">
+      <a href="#/home" data-route="home" class="active">హోమ్</a>
+      <a href="#/top15" data-route="top15">Top 15</a>
       <a href="#/today" data-route="today">ఈరోజు వార్తలు</a>
-      <a href="#/indian_markets" data-route="indian_markets">భారత మార్కెట్</a>
-      <a href="#/stocks_in_news" data-route="stocks_in_news">Stocks in News</a>
-      <a href="#/global_markets" data-route="global_markets">ప్రపంచ మార్కెట్</a>
-      <a href="#/fii_dii" data-route="fii_dii">FII / DII</a>
-      <a href="#/sector" data-route="sector">Sector Dashboard</a>
-      <a href="#/adr" data-route="adr">ADR</a>
-      <a href="#/currency" data-route="currency">Currency</a>
-      <a href="#/crude" data-route="crude">Crude Oil</a>
-      <a href="#/calendar" data-route="calendar">Economic Calendar</a>
-      <a href="#/nifty_range" data-route="nifty_range">NIFTY Expected Range</a>
+      <a href="#/stocks_in_news" data-route="stocks_in_news">Stocks</a>
+      <a href="#/sector" data-route="sector">రంగాలు</a>
+      <a href="#/fii_dii" data-route="fii_dii">FII/DII</a>
+      <a href="#/crude" data-route="crude">Crude</a>
+      <a href="#/strength" data-route="strength">మార్కెట్ బలం</a>
+      <a href="#/calendar" data-route="calendar">క్యాలెండర్</a>
     </div>
+
     <form class="search" role="search" id="search-form">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.6-4.6"/></svg>
-      <input id="search" type="search" placeholder="వార్తలు, కంపెనీ లేదా Ticker శోధించండి..." autocomplete="off" aria-label="వార్తలను శోధించండి">
+      <input id="search" type="search" placeholder="స్టాక్ లేదా రంగం శోధించండి..." autocomplete="off" aria-label="వార్తలను శోధించండి">
       <kbd aria-hidden="true">/</kbd>
     </form>
+
     <div class="palette-picker">
       <button class="palette-btn" id="palette-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="palette-menu" title="రంగుల ఎంపిక (P)">
         <span class="swatch" aria-hidden="true"><i></i><i></i><i></i></span><span class="sr">రంగుల ఎంపిక</span>
       </button>
       <div class="palette-menu" id="palette-menu" role="menu" aria-label="రంగుల ఎంపిక" hidden></div>
     </div>
+
     <button class="theme-btn" id="theme-toggle" type="button" title="రాత్రి / పగటి ఎడిషన్ మార్చండి">
       <span class="sun" aria-hidden="true">☀</span><span class="moon" aria-hidden="true">☾</span>
       <span class="sr">రాత్రి / పగటి ఎడిషన్</span>
     </button>
   </nav>
 
+  <!-- Main View Container -->
   <main id="view" tabindex="-1">
     <div class="loading"><span class="beat"></span> వార్తలను సిద్ధం చేస్తున్నాము…</div>
   </main>

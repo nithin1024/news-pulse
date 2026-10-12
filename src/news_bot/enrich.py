@@ -86,31 +86,34 @@ BATCH_SIZE = 6
 MAX_ATTEMPTS = 3
 
 ITEM_SYSTEM = """నువ్వు ఒక సీనియర్ ఫైనాన్షియల్ న్యూస్ అనలిస్ట్ మరియు "తెలుగు మార్కెట్ పల్స్" (Telugu Stock Market News Pulse) ప్రధాన సంపాదకుడివి.
+మొత్తం వెబ్సైట్ సరళమైన, ఆధునిక వాడుక తెలుగులో (AP & Telangana లో వాడే సులభమైన భాష) ఉండాలి. గ్రంథిక లేదా కఠిన అనువాదాలు వాడకూడదు.
+కంపెనీల పేర్లు, Tickers, NIFTY, SENSEX, FII, DII, IPO, RBI వంటి పదాలను ఆంగ్లంలో ఉంచాలి.
 
 ప్రధాన నిబంధనలు:
-1. ఈ వెబ్సైట్లో కేవలం Stock Marketకు సంబంధించిన వార్తలు మాత్రమే ఉండాలి.
-2. స్టాక్ మార్కెట్, కంపెనీ షేర్లు లేదా మార్కెట్ కదలికలతో ప్రత్యక్ష/పరోక్ష సంబంధం లేని వార్తలను పూర్తిగా తిరస్కరించాలి ("importance": 1, "category": "other").
-3. ప్రపంచ వార్తలను అవి భారతీయ మార్కెట్లను ఎలా ప్రభావితం చేస్తాయో (ఉదా: Tariffs, Crude, Fed Rates) స్పష్టమైన మార్కెట్ ప్రభావం ఉన్నప్పుడు మాత్రమే చేర్చు.
-4. అన్ని వివరణలు, సారాంశాలు, శీర్షికలు, ప్రభావ విశ్లేషణలు తప్పనిసరిగా తెలుగులోనే రాయాలి.
-5. కంపెనీల అసలు పేర్లు, Stock Tickers, NIFTY 50, FII, DII, IPO వంటి ప్రామాణిక పదాలను ఆంగ్లంలో ఉంచవచ్చు.
-6. సాంకేతిక పదాలు వచ్చినప్పుడు సరళమైన తెలుగు అర్థం ఇవ్వాలి.
+1. కేవలం Stock Market, Listed Companies, Macro Economy, Currencies, Commodities సంబంధిత వార్తలు మాత్రమే ఉండాలి.
+2. స్టాక్ మార్కెట్తో సంబంధం లేని సాధారణ రాజకీయాలు, వినోదం, క్రైమ్, క్రీడలు పూర్తిగా తిరస్కరించాలి ("importance": 1, "category": "other").
+3. ప్రపంచ వార్తలను అవి భారతీయ మార్కెట్లు, రంగాలు లేదా సెంటిమెంట్పై చూపే ప్రభావం ఉన్నప్పుడు మాత్రమే చేర్చాలి.
+4. "impact_reason_te" లో సాధారణ సెంటిమెంట్ కాకుండా ఆర్థిక కారణం (financial transmission mechanism) వివరించాలి (ఉదా: క్రూడ్ పెరిగితే పెయింట్స్, ఎయిర్‌లైన్స్ ఖర్చులు పెరుగుతాయి; కొత్త ఆర్డర్ వస్తే కంపెనీ భవిష్యత్ ఆదాయం మెరుగుపడుతుంది).
 
 ప్రతి వార్తకు క్రింది JSON ఫీల్డ్స్ ఇవ్వాలి:
 - "id": ఇన్పుట్ ఐడీ
-- "title_te": ఆకర్షణీయమైన, స్పష్టమైన తెలుగు శీర్షిక
-- "summary_te": అసలు వార్తలో జరిగిన వాస్తవాన్ని వివరిస్తూ 1-2 స్పష్టమైన తెలుగు వాక్యాలు
-- "why_it_matters_te": ఇన్వెస్టర్లకు లేదా మార్కెట్కు ఇది ఎందుకు ముఖ్యమో తెలుగులో 1 వాక్యం
+- "title_te": స్పష్టమైన, ఆకర్షణీయమైన తెలుగు శీర్షిక
+- "summary_te": అసలు వార్తలో జరిగిన ముఖ్యమైన వాస్తవాలు (2-3 వాక్యాలు)
+- "why_it_matters_te": ఇన్వెస్టర్లకు లేదా మార్కెట్కు ఇది ఎందుకు ముఖ్యం? (1-2 వాక్యాలు)
 - "category": indian_markets, stocks_in_news, global_markets, fii_dii, commodities_forex, earnings, ipo, economy, other
 - "sentiment": "positive", "negative", "neutral", లేదా "mixed"
 - "sentiment_label_te": "సానుకూలం", "ప్రతికూలం", "తటస్థం", లేదా "మిశ్రమ ప్రభావం"
-- "importance": 1 నుంచి 5 వరకు (5 = అత్యంత కీలకం, 1 = అనవసరం)
-- "news_strength": "Strong", "Moderate", లేదా "Weak" (వార్త యొక్క బలం)
+- "importance": 1 నుంచి 5 వరకు (5 = అత్యంత కీలకం)
+- "news_strength": "Strong", "Moderate", లేదా "Weak"
 - "intraday_action": "WAIT", "WATCH", "UPSIDE SETUP", "DOWNSIDE SETUP", లేదా "AVOID NEWS-ONLY TRADE"
-- "affected_stocks": ప్రభావితమైన కంపెనీల టిక్కర్లు లేదా పేర్లు (ఉదా: ["RELIANCE"])
-- "affected_sectors": ప్రభావిత రంగాలు
-- "market_impact_te": సాధ్యమైన మార్కెట్ ప్రభావం మరియు కారణం (తెలుగులో).
+- "affected_stocks": ప్రభావితమైన కంపెనీల టిక్కర్లు లేదా పేర్లు (ఉదా: ["RELIANCE", "TCS"])
+- "affected_sectors": ప్రభావిత రంగాలు (ఉదా: ["Banking", "IT"])
+- "market_impact_te": సాధ్యమైన మార్కెట్ ప్రభావం (తెలుగులో)
+- "impact_reason_te": ఆర్థిక కారణం (Financial Transmission Mechanism తెలుగులో)
+- "impact_horizon": "intraday", "short-term", లేదా "long-term"
+- "confidence": "high", "medium", లేదా "low"
 
-Reply with JSON: {"items": [{"id": "...", "title_te": "...", "summary_te": "...", "why_it_matters_te": "...", "category": "...", "sentiment": "positive", "sentiment_label_te": "సానుకూలం", "importance": 4, "news_strength": "Strong", "intraday_action": "WAIT", "affected_stocks": [...], "affected_sectors": [...], "market_impact_te": "..."}]}"""
+Reply with JSON: {"items": [{"id": "...", "title_te": "...", "summary_te": "...", "why_it_matters_te": "...", "category": "...", "sentiment": "positive", "sentiment_label_te": "సానుకూలం", "importance": 4, "news_strength": "Strong", "intraday_action": "WATCH", "affected_stocks": [...], "affected_sectors": [...], "market_impact_te": "...", "impact_reason_te": "...", "impact_horizon": "short-term", "confidence": "high"}]}"""
 
 DAILY_SYSTEM = """నువ్వు 'తెలుగు మార్కెట్ పల్స్' ప్రధాన ఆర్థిక సంపాదకుడివి. గత 24 గంటల స్టాక్ మార్కెట్ పరిణామాల ఆధారంగా 'ఈరోజు మార్కెట్ డైలీ బ్రీఫింగ్' (Daily Market Brief) రాయాలి.
 భాష పూర్తిగా తెలుగులోనే ఉండాలి. సాంకేతిక పదాలు, టిక్కర్లు ఇంగ్లీష్లో ఉండవచ్చు.
@@ -272,27 +275,44 @@ def fallback_enrichment(item: dict) -> dict:
     summary_te = _translate_to_telugu(excerpt[:240]) if excerpt else title_te
     why_te = "ఈ వార్త సంబంధిత కంపెనీ షేర్లు మరియు రంగాల సెంటిమెంట్పై తక్షణ ప్రభావం చూపే అవకాశం ఉంది."
 
+    # Detailed financial mechanism explanations in conversational Telugu
     impact_desc = {
-        "positive": "ఈ పరిణామం మార్కెట్ లేదా సంబంధిత రంగాల షేర్లకు సానుకూల ఊపునివ్వవచ్చు.",
-        "negative": "ఈ పరిణామం కారణంగా స్వల్పకాలిక అమ్మకాల ఒత్తిడి ఏర్పడే అవకాశం ఉంది.",
-        "neutral": "ఈ వార్త తటస్థ మార్కెట్ పరిధిలోనే ఉంది; ప్రత్యక్ష తీవ్ర ప్రభావం పరిమితం.",
-        "mixed": "కొన్ని రంగాలకు సానుకూలంగా, మరికొన్ని రంగాలకు ప్రతికూలంగా మిశ్రమ ప్రభావం ఉండవచ్చు.",
+        "positive": "ఈ పరిణామం సంబంధిత కంపెనీ వ్యాపార వృద్ధికి లేదా రంగానికి సానుకూల ఊపునివ్వవచ్చు.",
+        "negative": "ఈ పరిణామం కారణంగా స్వల్పకాలిక అమ్మకాల ఒత్తిడి లేదా లాభాలపై ప్రభావం ఉండే అవకాశం ఉంది.",
+        "neutral": "ఈ వార్త మార్కెట్లో సాధారణ పరిధిలోనే ఉంది; ప్రత్యక్ష తీవ్ర ప్రభావం పరిమితం.",
+        "mixed": "కొన్ని విభాగాలకు సానుకూలంగా, మరికొన్నింటికి ప్రతికూలంగా మిశ్రమ ప్రభావం ఉండవచ్చు.",
+    }[sentiment]
+
+    impact_reason_desc = {
+        "positive": "కంపెనీ ఆర్డర్ బుక్, ఆదాయ సామర్థ్యం లేదా నిర్వహణ లాభాల మార్జిన్లు మెరుగుపడే అవకాశం ఉంది.",
+        "negative": "ముడిసరుకు ఖర్చులు పెరగడం, నియంత్రణ ఆంక్షలు లేదా స్వల్పకాలిక అమ్మకాల ఒత్తిడి లాభాలపై భారం మోపవచ్చు.",
+        "neutral": "మార్కెట్ ఇప్పటికే ఈ పరిణామాన్ని డిస్కౌంట్ చేసింది; తక్షణ ఒడిదుడుకులు పరిమితం.",
+        "mixed": "ఆదాయం పెరిగినప్పటికీ వ్యయాలు లేదా మార్జిన్లపై ఒత్తిడి కారణంగా మిశ్రమ స్పందన రావచ్చు.",
     }[sentiment]
 
     return {
         "title_te": title_te,
+        "summary": summary_te,
         "summary_te": summary_te,
+        "why": why_te,
         "why_it_matters_te": why_te,
         "category": cat,
         "sentiment": sentiment,
         "sentiment_label_te": SENTIMENT_MAP[sentiment],
         "importance": importance,
+        "news_strength": "Strong" if importance >= 4 else "Moderate",
+        "intraday_action": "WATCH" if importance >= 4 else "WAIT",
         "affected_stocks": stocks,
         "affected_sectors": sectors or ["General Market"],
         "market_impact_te": impact_desc,
+        "impact_reason_te": impact_reason_desc,
         "impact_horizon": "short-term",
         "confidence": "medium",
         "tags": [s.lower() for s in stocks[:2]] + [sec.lower() for sec in sectors[:2]],
+        "source_name": item.get("source_name", ""),
+        "source_url": item.get("url", ""),
+        "published_at": item.get("published", ""),
+        "fetched_at": item.get("fetched", ""),
     }
 
 
@@ -308,6 +328,7 @@ def clean_ai(raw: dict) -> dict | None:
     title_te = str(raw.get("title_te") or raw.get("title") or "").strip()
     why_it_matters_te = str(raw.get("why_it_matters_te") or raw.get("why") or "").strip()
     market_impact_te = str(raw.get("market_impact_te") or raw.get("market_impact") or "").strip()
+    impact_reason_te = str(raw.get("impact_reason_te") or raw.get("impact_reason") or "").strip()
 
     category = str(raw.get("category") or "").strip().lower()
     if category not in CATEGORIES:
@@ -353,6 +374,11 @@ def clean_ai(raw: dict) -> dict | None:
 
     intraday_action = str(raw.get("intraday_action") or "WATCH").strip().upper()
 
+    if not impact_reason_te:
+        impact_reason_te = (
+            "ఈ పరిణామం కంపెనీ ఆదాయ అంచనాలు లేదా సంబంధిత రంగ సెంటిమెంట్పై ప్రత్యక్ష ప్రభావం చూపే అవకాశం ఉంది."
+        )
+
     return {
         "title_te": title_te[:300],
         "summary": summary_te[:650],
@@ -367,12 +393,10 @@ def clean_ai(raw: dict) -> dict | None:
         "intraday_action": intraday_action,
         "impact_horizon": horizon,
         "confidence": confidence,
-        "tags": tags,
         "affected_stocks": stocks,
         "affected_sectors": sectors,
         "market_impact_te": market_impact_te[:500] or f"{sentiment_label_te} ప్రభావం చూపే అవకాశం ఉంది.",
-        "impact_horizon": horizon,
-        "confidence": confidence,
+        "impact_reason_te": impact_reason_te[:500],
         "tags": [str(t).strip().lower()[:30] for t in tags if str(t).strip()][:5],
     }
 

@@ -417,7 +417,11 @@ def test_build_site_writes_index_and_day_files(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(build, "CONTENT_DIR", content)
     stories = build_stories(
-        [item("Alpha launch", source=src("a")), item("Beta paper", source=src("b"), hours_ago=30)]
+        [
+            item("Alpha launch", source=src("a"), hours_ago=2),
+            item("Beta fresh", source=src("b"), hours_ago=12),
+            item("Gamma expired", source=src("c"), hours_ago=30),  # Pruned by rolling 24h retention
+        ]
     )
     out = tmp_path / "site"
     build.build_site(
@@ -430,8 +434,41 @@ def test_build_site_writes_index_and_day_files(tmp_path, monkeypatch):
     )
     index = json.loads((out / "data" / "index.json").read_text("utf-8"))
     assert sum(d["count"] for d in index["days"]) == 2
+    assert index["active_stories_count"] == 2
+    assert index["retention_hours"] == 24
+    assert "generated_ist" in index
     assert [c["name"] for c in index["conferences"]] == ["Future"]
     assert index["brief"] == {"bullets": []}
     for d in index["days"]:
         assert (out / "data" / "days" / f"{d['date']}.json").exists()
     assert (out / "index.html").exists()
+
+
+def test_market_pulse_snapshot_has_required_sections():
+    from news_bot.market_data import get_market_pulse_snapshot
+    pulse = get_market_pulse_snapshot()
+    assert "indices" in pulse
+    assert len(pulse["indices"]) >= 5
+    assert "crude_oil_drivers" in pulse
+    assert len(pulse["crude_oil_drivers"]) == 8
+    assert "trade_setup_top15" in pulse
+    assert len(pulse["trade_setup_top15"]) == 15
+    assert "market_strength" in pulse
+    assert -100 <= pulse["market_strength"]["score"] <= 100
+    assert "workflow_steps" in pulse["market_strength"]
+    assert "sectors" in pulse
+    assert len(pulse["sectors"]) >= 14
+    assert "stocks_in_news_benchmarks" in pulse
+    assert len(pulse["stocks_in_news_benchmarks"]) >= 5
+
+
+def test_story_enrichment_has_telugu_fields():
+    it = item("TCS signs multi-million dollar cloud deal", source=src("tcs", category="stocks_in_news"))
+    fallback = enrich.fallback_enrichment(it)
+    assert "title_te" in fallback
+    assert "why_it_matters_te" in fallback
+    assert "impact_reason_te" in fallback
+    assert fallback["news_strength"] in {"Strong", "Moderate", "Weak"}
+    assert fallback["intraday_action"] in {"WAIT → BUY", "WAIT → SELL", "WATCH", "WAIT", "AVOID"}
+    assert fallback["impact_horizon"] in {"intraday", "short-term", "long-term"}
+

@@ -18,7 +18,7 @@ import math
 from collections import defaultdict
 
 from news_bot.enrich import default_category
-from news_bot.textutil import parse_iso, title_tokens
+from news_bot.textutil import parse_iso, title_tokens, to_ist_str
 
 WINDOW_HOURS = 72
 # Words appearing in more than this many headlines in the window ("openai",
@@ -148,7 +148,12 @@ def make_story(members: list[dict]) -> dict:
         "url": lead["url"],
         "source": lead["source"],
         "source_name": lead["source_name"],
+        "source_url": lead["url"],
         "published": earliest["published"],
+        "published_at": earliest["published"],
+        "published_ist": to_ist_str(earliest["published"]),
+        "fetched_at": earliest.get("fetched") or earliest["published"],
+        "fetched_ist": to_ist_str(earliest.get("fetched") or earliest["published"]),
         # When the collector first saw this story; drives "new since last visit".
         "seen": min(m["fetched"] for m in members),
         "kind": lead.get("kind", "article"),
@@ -162,7 +167,8 @@ def make_story(members: list[dict]) -> dict:
         "summary_te": ai.get("summary_te") or ai.get("summary", ""),
         "why": ai.get("why_it_matters_te") or ai.get("why", ""),
         "why_it_matters_te": ai.get("why_it_matters_te") or ai.get("why", ""),
-        "market_impact_te": ai.get("market_impact_te", ""),
+        "market_impact_te": ai.get("market_impact_te") or f"{sentiment_label_te} ప్రభావం చూపే అవకాశం ఉంది.",
+        "impact_reason_te": ai.get("impact_reason_te") or ai.get("market_impact_te") or "సంబంధిత రంగం మరియు స్టాక్ సెంటిమెంట్ ప్రభావం.",
         "news_strength": ai.get("news_strength", "Moderate"),
         "intraday_action": ai.get("intraday_action", "WATCH"),
         "impact_horizon": ai.get("impact_horizon", "short-term"),

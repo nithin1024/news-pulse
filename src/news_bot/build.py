@@ -18,14 +18,16 @@ from pathlib import Path
 
 from news_bot.enrich import CATEGORIES
 from news_bot.market_data import get_market_pulse_snapshot
-from news_bot.textutil import iso, parse_iso, utcnow
+from news_bot.textutil import iso, parse_iso, to_ist_str, utcnow
 
 log = logging.getLogger("news-bot.build")
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE_SRC = ROOT / "site"
 CONTENT_DIR = ROOT / "content"
-SITE_DAYS = 60
+SITE_RETENTION_HOURS = 24
+SITE_DAYS = 1
+
 
 
 def _dump(path: Path, value) -> None:
@@ -58,6 +60,7 @@ def build_site(
     market_pulse: dict | None = None,
     trending_models: list[dict] | None = None,
     run: dict,
+    retention_hours: int = SITE_RETENTION_HOURS,
 ) -> None:
     out_dir = Path(out_dir)
     if out_dir.exists():
@@ -66,11 +69,15 @@ def build_site(
     data = out_dir / "data"
 
     now = utcnow()
-    cutoff = now - timedelta(days=SITE_DAYS)
+    # Rolling 24-hour retention: only news published within the last 24 hours
+    cutoff = now - timedelta(hours=retention_hours)
     by_day: dict[str, list[dict]] = defaultdict(list)
+    active_24h_stories = []
     for story in stories:
-        if parse_iso(story["published"]) >= cutoff:
+        pub = parse_iso(story["published"])
+        if pub and pub >= cutoff:
             by_day[story["published"][:10]].append(story)
+            active_24h_stories.append(story)
     for day, rows in by_day.items():
         rows.sort(key=lambda s: s["score"], reverse=True)
         _dump(data / "days" / f"{day}.json", rows)
@@ -88,7 +95,11 @@ def build_site(
 
     index = {
         "generated": iso(now),
+        "generated_ist": to_ist_str(now),
+        "last_updated_ist": to_ist_str(now),
+        "retention_hours": retention_hours,
         "site_title": "తెలుగు మార్కెట్ పల్స్ | Telugu Market Pulse",
+        "site_subtitle": "స్టాక్ మార్కెట్కు సంబంధించిన తాజా వార్తలు — సులభమైన తెలుగులో",
         "run": run,
         "categories": CATEGORIES,
         "days": sorted(days, key=lambda d: d["date"], reverse=True),
@@ -96,6 +107,7 @@ def build_site(
         "weekly": weekly[max(weekly)] if weekly else None,
         "market_pulse": market_pulse,
         "sources": sources,
+        "active_stories_count": len(active_24h_stories),
         "trending_models": trending_models or [],
         "conferences": _conferences(now),
     }

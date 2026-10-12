@@ -2,8 +2,15 @@ name: Collect & publish
 
 on:
   schedule:
-    # Every two hours, off the top of the hour when GitHub's scheduler is busiest.
-    - cron: "17 */2 * * *"
+    # Frequent polling every 15 minutes.
+    # NOTE ON GITHUB ACTIONS SCHEDULING LIMITATIONS:
+    # 1. GitHub Actions cron does not guarantee execution at the exact minute. During peak UTC hours,
+    #    jobs may be queued with 5-20 minutes of latency by the runner infrastructure.
+    # 2. Workflows on inactive repositories can be automatically disabled by GitHub after 60 days of inactivity
+    #    (mitigated here via permissions: actions: write).
+    # 3. For near-real-time 5-minute ticks, an external webhook / cron trigger (e.g. Cloudflare Worker or AWS EventBridge)
+    #    invoking repository_dispatch can complement this native GitHub Actions cron.
+    - cron: "*/15 * * * *"
   workflow_dispatch: {} # "Run workflow" button in the Actions tab
   push:
     branches: [main]

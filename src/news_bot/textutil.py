@@ -7,7 +7,7 @@ tokenising and timestamp handling.
 import hashlib
 import html
 import re
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 # Query parameters that only track where a click came from. Dropping them
@@ -102,3 +102,29 @@ def iso(dt: datetime) -> str:
 
 def utcnow() -> datetime:
     return datetime.now(UTC)
+
+
+IST_OFFSET = timedelta(hours=5, minutes=30)
+
+
+def to_ist_dt(value: datetime | str | None) -> datetime | None:
+    if value is None:
+        return None
+    if isinstance(value, str):
+        dt = parse_iso(value)
+        if dt is None:
+            return None
+    else:
+        dt = value
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC) + IST_OFFSET
+
+
+def to_ist_str(value: datetime | str | None, fmt: str = "%d-%b %I:%M %p IST") -> str:
+    """Format UTC datetime or ISO string to IST readable format."""
+    dt = to_ist_dt(value)
+    if dt is None:
+        return ""
+    return dt.strftime(fmt)
+

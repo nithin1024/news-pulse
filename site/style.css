@@ -934,3 +934,148 @@ main { max-width: var(--measure); margin: 0 auto; padding: 26px 24px 60px; outli
 .stat-10-card .lbl { font-size: 11px; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
 .stat-10-card .val { font: 800 18px/1.1 var(--mono); color: var(--ink); }
 .stat-10-card .sub { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+
+/* ------------------------------------------------------------ HAMBURGER SIDE DRAWER (Phase 6) */
+.hamburger-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--paper-1); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 6px 12px; font: 700 13px/1 var(--sans); color: var(--ink); cursor: pointer;
+  transition: all .2s var(--ease); flex: none;
+}
+.hamburger-btn:hover { background: var(--paper-2); border-color: var(--ink-2); }
+.hamburger-btn .bars { display: flex; flex-direction: column; gap: 3.5px; width: 16px; }
+.hamburger-btn .bars span { display: block; height: 2px; width: 100%; background: currentColor; border-radius: 1px; }
+
+#drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px); z-index: 990;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s var(--ease);
+}
+body.drawer-open #drawer-backdrop { opacity: 1; pointer-events: auto; }
+
+#nav-drawer {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 330px; max-width: 86vw;
+  background: var(--paper); border-right: 1px solid var(--rule); z-index: 1000;
+  box-shadow: 6px 0 28px rgba(0, 0, 0, 0.28);
+  display: flex; flex-direction: column;
+  transform: translateX(-100%); transition: transform 0.28s var(--ease);
+}
+body.drawer-open #nav-drawer { transform: translateX(0); }
+
+.drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px; border-bottom: 2px solid var(--ink);
+  background: var(--paper-1);
+}
+.drawer-title { font: 800 16px/1.2 var(--serif); color: var(--ink); }
+.drawer-subtitle { font: 11px/1.3 var(--mono); color: var(--ink-2); margin-top: 2px; }
+.drawer-close {
+  background: transparent; border: 1px solid var(--rule); border-radius: 4px;
+  width: 32px; height: 32px; font-size: 16px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; color: var(--ink);
+  transition: background .15s;
+}
+.drawer-close:hover { background: var(--paper-2); border-color: var(--ink); }
+
+.drawer-nav {
+  flex: 1; overflow-y: auto; padding: 10px 8px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.drawer-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 4px; text-decoration: none; font: 600 13.5px/1.3 var(--sans);
+  color: var(--ink-2); transition: all .15s; border-left: 3px solid transparent;
+}
+.drawer-link:hover {
+  background: var(--paper-1); color: var(--ink); border-left-color: var(--signal);
+}
+.drawer-link.active {
+  background: var(--marker); color: var(--signal-ink); font-weight: 700;
+  border-left-color: var(--signal);
+}
+.drawer-num {
+  font: 700 11px/1 var(--mono); color: var(--ink-3); width: 20px;
+  text-align: right; flex: none;
+}
+.drawer-link.active .drawer-num { color: var(--signal-ink); }
+.drawer-tag {
+  margin-left: auto; font: 600 10px var(--mono); padding: 1px 5px;
+  border-radius: 3px; background: var(--paper-2); color: var(--ink-2);
+}
+
+.drawer-footer {
+  padding: 12px 16px; border-top: 1px solid var(--rule); background: var(--paper-1);
+  font: 11px/1.4 var(--mono); color: var(--ink-3); text-align: center;
+}
+
+/* ------------------------------------------------------------ 24-HOUR RETENTION & FRESHNESS BADGE */
+.retention-pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px;
+  background: rgba(22, 163, 74, 0.12); color: var(--sentiment-positive);
+  border: 1px solid rgba(22, 163, 74, 0.3); border-radius: 12px;
+  font: 700 11px var(--mono); text-transform: uppercase;
+}
+.retention-pulse {
+  width: 6px; height: 6px; border-radius: 50%; background: #16a34a;
+  box-shadow: 0 0 0 rgba(22, 163, 74, 0.6); animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+/* ------------------------------------------------------------ DETAILED 8-QUESTION EXPANDABLE ACCORDION (Phase 9) */
+details.story-deep-dive {
+  margin-top: 12px; border: 1px solid var(--rule); border-radius: 4px;
+  background: var(--paper-1); overflow: hidden;
+}
+details.story-deep-dive summary {
+  padding: 8px 12px; font: 700 12.5px var(--sans); color: var(--signal);
+  cursor: pointer; list-style: none; display: flex; align-items: center;
+  justify-content: space-between; user-select: none;
+}
+details.story-deep-dive summary::-webkit-details-marker { display: none; }
+details.story-deep-dive summary::after {
+  content: "▾ పూర్తి వివరణ (8 ముఖ్య ప్రశ్నలు)"; font-size: 11.5px;
+}
+details.story-deep-dive[open] summary::after {
+  content: "▴ సంక్షిప్తంగా చూపించు";
+}
+.deep-dive-body {
+  padding: 12px 14px; border-top: 1px dashed var(--rule);
+  background: var(--paper); font-size: 13px; line-height: 1.6;
+}
+.deep-dive-q {
+  font-weight: 700; color: var(--ink); margin-top: 8px; margin-bottom: 2px;
+  font-size: 12.5px;
+}
+.deep-dive-q:first-child { margin-top: 0; }
+.deep-dive-a { color: var(--ink-2); margin-bottom: 6px; }
+
+/* ------------------------------------------------------------ SEPARATE MARKET-IMPACT TABLES (Phase 10) */
+.impact-table-pos { border-left: 4px solid var(--sentiment-positive) !important; }
+.impact-table-neg { border-left: 4px solid var(--sentiment-negative) !important; }
+.impact-table-neu { border-left: 4px solid var(--sentiment-neutral) !important; }
+.impact-table-mix { border-left: 4px solid var(--sentiment-mixed) !important; }
+
+/* ------------------------------------------------------------ MONEYCONTROL DASHBOARD SECTIONS (Phase 7) */
+.dash-quick-jump {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 24px; padding: 12px;
+  background: var(--paper-1); border: 1px solid var(--rule); border-radius: 6px;
+}
+.dash-jump-btn {
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 4px;
+  font: 600 12px var(--sans); color: var(--ink); text-decoration: none;
+  transition: all .15s;
+}
+.dash-jump-btn:hover { background: var(--marker); border-color: var(--signal); }
+
+.crude-driver-card {
+  background: var(--paper-1); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 14px; margin-bottom: 12px;
+}
+.crude-driver-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+}

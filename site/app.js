@@ -461,6 +461,88 @@ function renderStocksInNewsFinalTable(stories) {
   </section>`;
 }
 
+function renderImpactTable(stories, sentiment, title, icon, subtitle = "") {
+  const filtered = (stories || []).filter(s => s.sentiment === sentiment);
+  const rows = filtered.map(s => {
+    const stockPills = (s.affected_stocks || []).map(stk => `<span class="stock-pill">${esc(stk)}</span>`).join(" ");
+    const secPills = (s.affected_sectors || []).map(sec => `<span class="sector-pill">${esc(sec)}</span>`).join(" ");
+    const entity = stockPills || secPills || `<span style="color:var(--ink-3)">${esc(catName(s.category))}</span>`;
+    const str = s.news_strength || (s.importance >= 4 ? "Strong" : s.importance === 3 ? "Moderate" : "Weak");
+    const why = s.why_it_matters_te || s.impact_reason_te || s.why || "మార్కెట్ సెంటిమెంట్ మరియు ఆదాయాలపై ప్రభావం.";
+    const horizon = s.impact_horizon === "intraday" ? "ఇంట్రాడే" : s.impact_horizon === "long-term" ? "దీర్ఘకాలిక" : "స్వల్పకాలిక";
+    const dirLabel = sentiment === "positive" ? "సానుకూలం" : sentiment === "negative" ? "ప్రతికూలం" : sentiment === "mixed" ? "మిశ్రమం" : "తటస్థం";
+
+    return `<tr>
+      <td class="col-pri">${priorityBadge(s)}</td>
+      <td class="col-stock">${entity}</td>
+      <td class="col-title"><a href="${safeUrl(s.url)}" ${ext} data-open="${esc(s.id)}">${esc(s.title_te || s.title)}</a></td>
+      <td class="col-impact"><span class="sentiment-badge ${sentiment === 'positive' ? 'badge-pos' : sentiment === 'negative' ? 'badge-neg' : 'badge-neu'}">${icon} ${dirLabel}</span></td>
+      <td style="font-weight:700;">${esc(str)}</td>
+      <td class="col-reason"><small style="line-height:1.45;display:block;">${esc(why)}</small></td>
+      <td style="font-size:12px;color:var(--ink-2);">${esc(horizon)}</td>
+      <td class="col-source"><small>${esc(s.source_name)}</small></td>
+    </tr>`;
+  }).join("");
+
+  return `
+  <section class="news-table-wrap reveal impact-section-${sentiment}" style="margin: 24px 0;">
+    <div class="sect-head">
+      <h2>${icon} ${title}</h2>
+      <span style="font-size:12.5px;color:var(--ink-2);">${subtitle || `${plural(filtered.length, "వార్తలు")}`}</span>
+    </div>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>ప్రాధాన్యత</th>
+          <th>స్టాక్ / రంగం</th>
+          <th>వార్త (News Headline)</th>
+          <th>దిశ</th>
+          <th>వార్త బలం</th>
+          <th>ఎందుకు? (Why It Matters)</th>
+          <th>ప్రభావ సమయం</th>
+          <th>మూలం</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows || `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--ink-3);">ప్రస్తుతం ఈ విభాగంలో వార్తలు లేవు.</td></tr>`}
+      </tbody>
+    </table>
+  </section>`;
+}
+
+function renderCatalystsGrid(stories, sentiment, title, icon, accentColor) {
+  const items = (stories || []).filter(s => s.sentiment === sentiment).slice(0, 4);
+  if (!items.length) return "";
+
+  return `
+  <section class="reveal" style="margin: 20px 0 28px;">
+    <div class="sect-head" style="margin-bottom: 12px;">
+      <h2>${icon} ${title}</h2>
+      <span style="font-size:12px;color:var(--ink-2);">తాజా 24 గంటల కీలక పరిణామాలు</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:14px;">
+      ${items.map(s => `
+        <div style="background:var(--paper-1);border:1px solid var(--rule);border-left:4px solid ${accentColor};border-radius:4px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:11px;font-weight:700;color:${accentColor};">${(s.affected_stocks || []).join(", ") || catName(s.category)}</span>
+              <span style="font-size:11px;color:var(--ink-3);">${ago(s.published)}</span>
+            </div>
+            <h4 style="margin:0 0 6px;font-size:14px;line-height:1.4;">
+              <a href="${safeUrl(s.url)}" ${ext} data-open="${esc(s.id)}" style="color:var(--ink);text-decoration:none;">${esc(s.title_te || s.title)}</a>
+            </h4>
+            <p style="margin:0 0 8px;font-size:12px;color:var(--ink-2);line-height:1.45;">${esc(s.why_it_matters_te || s.impact_reason_te || s.why || "")}</p>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--ink-3);padding-top:6px;border-top:1px solid var(--rule);">
+            <span>తీవ్రత: <b>${esc(s.news_strength || 'Strong')}</b></span>
+            <span>మూలం: <b>${esc(s.source_name)}</b></span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  </section>`;
+}
+
 window.filterStocksTable = function(q) {
   const query = (q || "").trim().toLowerCase();
   const rows = document.querySelectorAll("#stocks-table-tbody tr");
@@ -568,7 +650,8 @@ const isNew = (s) => state.prevVisit > 0 && Date.parse(s.seen || s.published) > 
 const plural = (n, word) => `${n.toLocaleString()} ${word}`;
 
 async function getJSON(path) {
-  const res = await fetch(path, { cache: "no-cache" });
+  const url = path + (path.includes("?") ? "&" : "?") + "_t=" + Date.now();
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(path + " → HTTP " + res.status);
   return res.json();
 }
@@ -656,6 +739,46 @@ function headline(s, tag = "h3") {
   return `<${tag} class="hl"><a href="${safeUrl(s.url)}" ${ext} data-open="${esc(s.id)}">${esc(title)}</a></${tag}>`;
 }
 
+function storyDeepDive(s) {
+  const q1 = s.summary_te || s.summary || s.title_te || s.title;
+  const q2 = s.excerpt || s.summary_te || "అధికారిక నివేదికలో పేర్కొన్న ముఖ్యమైన అంశాలు మరియు గణాంకాలు.";
+  const q3 = s.why_it_matters_te || s.why || "ఈ పరిణామం సంబంధిత కంపెనీ వ్యాపార అంచనాలు మరియు మార్కెట్ సెంటిమెంట్ను ప్రభావితం చేస్తుంది.";
+  const stocks = (s.affected_stocks || []).join(", ") || "సంబంధిత లిస్టెడ్ కంపెనీలు";
+  const sectors = (s.affected_sectors || []).join(", ") || catName(s.category);
+  const q4 = `స్టాక్స్: ${stocks} · రంగాలు: ${sectors}`;
+  const sent = s.sentiment || "neutral";
+  const sentLbl = s.sentiment_label_te || (sent === "positive" ? "సానుకూలం" : sent === "negative" ? "ప్రతికూలం" : "తటస్థం");
+  const q5 = s.impact_reason_te || s.market_impact_te || `${sentLbl} ప్రభావం ఏర్పడటానికి కంపెనీ భవిష్యత్ నగదు ప్రవాహాలు మరియు మార్జిన్లు ప్రధాన కారణం.`;
+  const horizon = s.impact_horizon === "intraday" ? "ఇంట్రాడే (తక్షణ స్పందన)" : s.impact_horizon === "long-term" ? "దీర్ఘకాలిక (వ్యాపార విస్తరణ)" : "స్వల్పకాలిక (కొన్ని రోజుల నుండి వారాలు)";
+  const q6 = horizon;
+  const q7 = s.confidence === "high" ? "అధిక విశ్వసనీయత — అధికారిక ప్రకటన వెలువడింది; విస్తృత మార్కెట్ ఒడిదుడుకులు మాత్రమే రిస్క్." : "మధ్యస్థం — మార్కెట్ విస్తృత సెంటిమెంట్ మరియు గ్లోబల్ పరిస్థితులపై ఆధారపడి ఉంటుంది.";
+  const pubTime = s.published_ist || (s.published ? new Date(s.published).toLocaleString('te-IN') : '');
+  const q8 = `${esc(s.source_name)} (${pubTime}) — <a href="${safeUrl(s.source_url || s.url)}" target="_blank" rel="noopener">అసలు కథనం ↗</a>`;
+
+  return `
+  <details class="story-deep-dive">
+    <summary>సమగ్ర విశ్లేషణ &amp; 8 ముఖ్య ప్రశ్నల వివరాలు</summary>
+    <div class="deep-dive-body">
+      <div class="deep-dive-q">1. ఏమి జరిగింది?</div>
+      <div class="deep-dive-a">${esc(q1)}</div>
+      <div class="deep-dive-q">2. అసలు వార్తలోని ముఖ్యమైన విషయాలు ఏమిటి?</div>
+      <div class="deep-dive-a">${esc(q2)}</div>
+      <div class="deep-dive-q">3. మార్కెట్కు ఎందుకు ముఖ్యం?</div>
+      <div class="deep-dive-a">${esc(q3)}</div>
+      <div class="deep-dive-q">4. ఏ కంపెనీలు లేదా రంగాలపై ప్రభావం ఉండొచ్చు?</div>
+      <div class="deep-dive-a">${esc(q4)}</div>
+      <div class="deep-dive-q">5. ${esc(sentLbl)} అని ఎందుకు చెబుతున్నాం? (కారణం)</div>
+      <div class="deep-dive-a">${esc(q5)}</div>
+      <div class="deep-dive-q">6. ప్రభావ సమయం (Impact Horizon):</div>
+      <div class="deep-dive-a">${esc(q6)}</div>
+      <div class="deep-dive-q">7. ఈ అంచనాలో అనిశ్చితి లేదా రిస్క్:</div>
+      <div class="deep-dive-a">${esc(q7)}</div>
+      <div class="deep-dive-q">8. అసలు వార్త మూలం:</div>
+      <div class="deep-dive-a">${q8}</div>
+    </div>
+  </details>`;
+}
+
 function body(s, { why = true } = {}) {
   const summary = s.summary_te || s.summary || s.excerpt || "";
   const whyText = s.why_it_matters_te || s.why || "";
@@ -663,7 +786,8 @@ function body(s, { why = true } = {}) {
   const whyBlock = (why && whyText) ? `<p class="why"><b>మార్కెట్కు ఎందుకు ముఖ్యం:</b> ${esc(whyText)}</p>` : "";
   const impact = marketImpactBox(s);
   const pills = stocksTags(s);
-  return text + whyBlock + impact + pills;
+  const deep = storyDeepDive(s);
+  return text + whyBlock + impact + pills + deep;
 }
 
 function also(s) {
@@ -738,7 +862,7 @@ function disclaimerBox() {
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, "");
   const [path, query = ""] = raw.split("?");
-  return { route: path || "today", params: Object.fromEntries(new URLSearchParams(query)) };
+  return { route: path || "home", params: Object.fromEntries(new URLSearchParams(query)) };
 }
 
 function setParams(params) {
@@ -758,8 +882,9 @@ async function render({ keepScroll = false } = {}) {
   const seq = ++renderSeq;
   if (!keepScroll) togglePaletteMenu(false);
   $$("#nav .section-links a").forEach((a) => a.classList.toggle("active", a.dataset.route === route));
+  $$("#drawer-nav .drawer-link").forEach((a) => a.classList.toggle("active", a.dataset.route === route));
   const view = $("#view");
-  const fn = VIEWS[route] || VIEWS.today;
+  const fn = VIEWS[route] || VIEWS.home || VIEWS.today;
   let html;
   try {
     html = await fn(params);
@@ -854,6 +979,125 @@ VIEWS.today = async () => {
 
   ${disclaimerBox()}
   <div class="status-line"><span>షార్ట్కట్లు: <kbd>j</kbd> <kbd>k</kbd> తరలించు · <kbd>o</kbd> ఓపెన్ · <kbd>m</kbd> రీడ్ · <kbd>s</kbd> సేవ్ · <kbd>/</kbd> శోధించు</span><a href="#/sources">మూలాల స్థితి</a></div>`;
+};
+
+// ---------------------------------------------------------------- MASTER HOME DASHBOARD (హోమ్)
+VIEWS.home = async () => {
+  const idx = state.index;
+  const week = await loadRange(2); // strictly fresh rolling window
+  remember(week);
+
+  const bar = marketOverviewBar(idx.market_pulse);
+  const catPos = renderCatalystsGrid(week, "positive", "A. Fresh Positive Catalysts (తాజా సానుకూల అంశాలు)", "🟢", "#16a34a");
+  const catNeg = renderCatalystsGrid(week, "negative", "B. Fresh Negative / Risk Catalysts (తాజా రిస్క్ & ప్రతికూల అంశాలు)", "🔴", "#dc2626");
+  const charts = renderMarketChartsGrid(idx.market_pulse);
+  const top15 = renderMoneycontrolTop15();
+  const macroSummary = renderTopSummaryTable(idx.market_pulse);
+  const stocksTable = renderStocksInNewsFinalTable(week);
+  const strengthSec = renderMarketStrengthSection();
+
+  // Impact Tables for Section I
+  const posTable = renderImpactTable(week, "positive", "I.1 🟢 సానుకూల ప్రభావ పట్టిక (Positive Market Impact Table)", "🟢", "ఆదాయాలు మరియు లాభదాయకతకు దోహదపడే అంశాలు");
+  const negTable = renderImpactTable(week, "negative", "I.2 🔴 ప్రతికూల ప్రభావ పట్టిక (Negative Market Impact Table)", "🔴", "వ్యయాలు పెరిగే లేదా మార్జిన్లపై ఒత్తిడి తెచ్చే అంశాలు");
+  const neuTable = renderImpactTable(week, "neutral", "I.3 🟡 తటస్థ ప్రభావ పట్టిక (Neutral Impact Table)", "🟡", "మార్కెట్ సమతుల్యత కలిగిన అంశాలు");
+  const mixTable = renderImpactTable(week, "mixed", "I.4 🟣 మిశ్రమ ప్రభావ పట్టిక (Mixed Impact Table)", "🟣", "భిన్నమైన ఫలితాలు ఇచ్చే ద్వంద్వ పరిణామాలు");
+
+  return `
+  ${bar}
+  <header class="page-head" style="margin-bottom:12px;">
+    <h1>తెలుగు మార్కెట్ పల్స్ — <em>లైవ్ ఫైనాన్షియల్ డాష్‌బోర్డ్</em></h1>
+    <span class="count">${ago(idx.generated)} నవీకరించబడింది</span>
+    <p>మనీకంట్రోల్ తరహా సమగ్ర సమాచార నిర్మాణం · కచ్చితమైన తెలుగు మార్కెట్ విశ్లేషణ</p>
+  </header>
+
+  <!-- Section A: Fresh Positive Catalysts -->
+  ${catPos}
+
+  <!-- Section B: Fresh Negative/Risk Catalysts -->
+  ${catNeg}
+
+  <!-- Section C: Market Macro Dashboard & Charts -->
+  ${charts}
+
+  <!-- Section D: Top 15 Things to Know Before the Opening Bell -->
+  ${top15}
+
+  <!-- Section E: Indian Market Overview -->
+  ${macroSummary}
+
+  <!-- Section G: Stocks in News -->
+  ${stocksTable}
+
+  <!-- Section I: Separate Market Impact Tables -->
+  <div class="reveal" style="margin: 32px 0 16px;">
+    <div class="sect-head">
+      <h2>మార్కెట్ ప్రభావ పట్టికలు <em>(Separate Impact Tables)</em></h2>
+      <span style="font-size:12.5px;color:var(--ink-2)">దిశ మరియు తీవ్రత ఆధారంగా స్పష్టమైన వర్గీకరణ</span>
+    </div>
+    ${posTable}
+    ${negTable}
+    ${mixTable}
+    ${neuTable}
+  </div>
+
+  <!-- Section J: Market Strength Dashboard -->
+  ${strengthSec}
+
+  <!-- Sections K, L, M: Quick Desks -->
+  <div class="desks reveal" style="margin: 32px 0;">
+    <section class="desk" style="--i:1">
+      <div class="sect-head"><h2>K. FII / DII <em>నికర నిధులు</em></h2><a href="#/fii_dii">పూర్తి వివరాలు →</a></div>
+      ${fiiMiniDesk(idx.market_pulse?.fii_dii)}
+    </section>
+    <section class="desk" style="--i:2">
+      <div class="sect-head"><h2>L. Crude &amp; <em>కమోడిటీలు</em></h2><a href="#/crude">8 డ్రైవర్లు →</a></div>
+      ${commoditiesMiniDesk(idx.market_pulse?.commodities_forex)}
+    </section>
+    <section class="desk" style="--i:3">
+      <div class="sect-head"><h2>P. ఆర్థిక <em>క్యాలెండర్</em></h2><a href="#/calendar">షెడ్యూల్ →</a></div>
+      ${calMiniList(idx.market_pulse?.economic_calendar || idx.conferences)}
+    </section>
+  </div>
+
+  ${disclaimerBox()}
+  <div class="status-line"><span>షార్ట్కట్లు: <kbd>j</kbd> <kbd>k</kbd> తరలించు · <kbd>o</kbd> ఓపెన్ · <kbd>m</kbd> రీడ్ · <kbd>s</kbd> సేవ్ · <kbd>/</kbd> శోధించు</span><a href="#/sources">మూలాల స్థితి</a></div>
+  `;
+};
+
+// Dedicated Top 15 View
+VIEWS.top15 = async () => {
+  return head("మార్కెట్ ప్రారంభానికి ముందు 15 విషయాలు", "Moneycontrol ట్రేడ్ సెటప్ ఆధారిత టాప్ 15 మార్కెట్ మూవింగ్ పరిణామాలు మరియు టెక్నికల్ సంకేతాలు.") +
+    renderMoneycontrolTop15() +
+    disclaimerBox();
+};
+
+// Dedicated Positive Catalysts View
+VIEWS.positive = async () => {
+  const week = await loadRange(2);
+  remember(week);
+  return head("Positive News (సానుకూల మార్కెట్ వార్తలు)", "లిస్టెడ్ కంపెనీలు, రంగాలు మరియు విస్తృత సూచీలకు లాభం చేకూర్చే తాజా సానుకూల పరిణామాలు.") +
+    renderCatalystsGrid(week, "positive", "తాజా సానుకూల అంశాలు", "🟢", "#16a34a") +
+    renderImpactTable(week, "positive", "సానుకూల వార్తల సమగ్ర పట్టిక", "🟢", "ఆదాయాలు మరియు వృద్ధికి ఊతమిచ్చే అంశాలు") +
+    disclaimerBox();
+};
+
+// Dedicated Negative / Risk Catalysts View
+VIEWS.negative = async () => {
+  const week = await loadRange(2);
+  remember(week);
+  return head("Negative News (ప్రతికూల & రిస్క్ పరిణామాలు)", "వ్యయాల పెరుగుదల, ఆర్డర్ రద్దులు, మార్జిన్ ఒత్తిడులు మరియు గ్లోబల్ స్థూల రిస్కులు.") +
+    renderCatalystsGrid(week, "negative", "తాజా రిస్క్ అంశాలు", "🔴", "#dc2626") +
+    renderImpactTable(week, "negative", "ప్రతికూల వార్తల సమగ్ర పట్టిక", "🔴", "మార్కెట్ మరియు కంపెనీ లాభాలపై ఒత్తిడి తెచ్చే అంశాలు") +
+    disclaimerBox();
+};
+
+// Dedicated Market Strength View
+VIEWS.strength = async () => {
+  const calcHtml = typeof window.renderNiftyCalculator === "function" ? window.renderNiftyCalculator() : "";
+  return head("Market Strength Dashboard (మార్కెట్ బలం విశ్లేషణ)", "పారదర్శక స్కోరింగ్ మోడల్, నిఫ్టీ ఇంట్రాడే ఎక్స్‌పెక్టెడ్ రేంజ్ క్యాలిక్యులేటర్ మరియు 8-దశల నిర్ధారణ వర్క్‌ఫ్లో.") +
+    renderMarketStrengthSection() +
+    calcHtml +
+    disclaimerBox();
 };
 
 function briefRefs(ids, refs) {
@@ -1665,8 +1909,41 @@ function focusCard(card) {
   card.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+function setupDrawer() {
+  const btn = $("#hamburger-btn");
+  const close = $("#drawer-close");
+  const backdrop = $("#drawer-backdrop");
+
+  const closeDrawer = () => {
+    document.body.classList.remove("drawer-open");
+    if (btn) btn.setAttribute("aria-expanded", "false");
+  };
+
+  if (btn) {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = document.body.classList.toggle("drawer-open");
+      btn.setAttribute("aria-expanded", String(open));
+    });
+  }
+
+  if (close) close.addEventListener("click", closeDrawer);
+  if (backdrop) backdrop.addEventListener("click", closeDrawer);
+
+  $$("#drawer-nav .drawer-link").forEach((link) => {
+    link.addEventListener("click", closeDrawer);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && document.body.classList.contains("drawer-open")) {
+      closeDrawer();
+    }
+  });
+}
+
 // ---------------------------------------------------------------- boot
 async function init() {
+  setupDrawer();
   try {
     await loadIndex();
   } catch (err) {
@@ -1688,14 +1965,20 @@ if (document.readyState === "loading") {
 
 VIEWS.sector = async () => {
   const sectors = [
-    { name: "NIFTY IT", chg: "+1.25%", news: "TCS, Infosys యూరప్ మరియు AI డీల్స్ పుంజుకోలు", stocks: "TCS, INFY, HCLTech", reason: "బలహీనపడిన రూపాయి ఎగుమతిదారులకు మద్దతు", str: "బలమైనది", status: "Strong", src: "NSE" },
-    { name: "NIFTY Pharma", chg: "+0.85%", news: "US FDA తనిఖీల్లో సానుకూల పరిశీలనలు", stocks: "Sun Pharma, Dr Reddy's, Cipla", reason: "డిఫెన్సివ్ కొనుగోళ్లు మరియు హెల్త్‌కేర్ డిమాండ్", str: "బలమైనది", status: "Strong", src: "NSE" },
-    { name: "NIFTY Metal", chg: "+0.60%", news: "చైనా ఆర్థిక ఉద్దీపన ప్యాకేజీలు, ఉత్పత్తి పెరుగుదల", stocks: "Tata Steel, JSW Steel, Hindalco", reason: "గ్లోబల్ లోహ ధరలలో రికవరీ సంకేతాలు", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
-    { name: "NIFTY Auto", chg: "-0.45%", news: "పండుగల సీజన్ అమ్మకాలపై మిశ్రమ అంచనాలు", stocks: "Maruti, Tata Motors, M&M", reason: "ఎంట్రీ-లెవల్ కార్ల అమ్మకాల్లో నెమ్మదింపు", str: "బలహీనం", status: "Deteriorating", src: "NSE" },
-    { name: "NIFTY Bank", chg: "-0.72%", news: "క్రెడిట్-డిపాజిట్ నిష్పత్తిపై RBI ఆందోళనలు", stocks: "HDFC Bank, ICICI Bank, SBIN", reason: "FII బ్యాంకింగ్ షేర్ల అమ్మకాలు, నిమ్స్ (NIM) ఒత్తిడి", str: "బలహీనం", status: "Weak", src: "NSE" },
-    { name: "NIFTY Realty", chg: "-1.40%", news: "వడ్డీ రేట్లు ఎక్కువగా ఉండటం, అధిక వాల్యుయేషన్లు", stocks: "DLF, Godrej Prop, Oberoi", reason: "లాభాల స్వీకరణ మరియు కొనుగోలుదార్ల ఆచితూచి ధోరణి", str: "తీవ్ర బలహీనం", status: "Weak", src: "NSE" },
-    { name: "NIFTY Energy", chg: "+0.20%", news: "గ్రీన్ ఎనర్జీ ప్రాజెక్టులు మరియు విద్యుత్ డిమాండ్", stocks: "Reliance, NTPC, Power Grid", reason: "పునరుత్పాదక ఇంధన విస్తరణ ఆర్డర్లు", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
-    { name: "NIFTY FMCG", chg: "-0.30%", news: "ముడిసరుకు ఖర్చులు పెరగడంతో మార్జిన్లపై భారం", stocks: "ITC, HUL, Dabur", reason: "గ్రామీణ రికవరీ నెమ్మదిగా సాగడం", str: "తటస్థం", status: "Deteriorating", src: "NSE" },
+    { name: "NIFTY 50 (బెంచ్‌మార్క్)", chg: "-0.28%", news: "కీలక మద్దతు స్థాయి 22,546 వద్ద కన్సాలిడేషన్", stocks: "Reliance, HDFC Bank, TCS, Infosys", reason: "FII విక్రయాల ఒత్తిడి, DII కొనుగోళ్ల రక్షణ", str: "మధ్యస్థం", status: "Neutral", src: "NSE" },
+    { name: "NIFTY Bank", chg: "-0.72%", news: "క్రెడిట్-డిపాజిట్ నిష్పత్తిపై RBI ఆందోళనలు, NIM ఒత్తిడి", stocks: "HDFC Bank, ICICI Bank, SBIN, Axis", reason: "FII బ్యాంకింగ్ షేర్ల అమ్మకాలు, నికర వడ్డీ మార్జిన్లపై ఒత్తిడి", str: "బలహీనం", status: "Weak", src: "NSE" },
+    { name: "NIFTY IT", chg: "+1.25%", news: "TCS, Infosys యూరప్ మరియు GenAI డీల్స్ పుంజుకోలు", stocks: "TCS, INFY, HCLTech, Wipro, TechM", reason: "బలహీనపడిన రూపాయి ఎగుమతిదారులకు మద్దతు, AI వ్యయాల పెరుగుదల", str: "బలమైనది", status: "Strong", src: "NSE" },
+    { name: "NIFTY Auto", chg: "-0.45%", news: "పండుగల సీజన్ అమ్మకాలపై మిశ్రమ అంచనాలు", stocks: "Maruti, Tata Motors, M&M, Bajaj Auto", reason: "ఎంట్రీ-లెవల్ ప్యాసింజర్ కార్ల అమ్మకాల్లో నెమ్మదింపు", str: "బలహీనం", status: "Deteriorating", src: "NSE" },
+    { name: "NIFTY Pharma", chg: "+0.85%", news: "US FDA తనిఖీల్లో క్లీన్ అబ్జర్వేషన్లు, కొత్త ANDA ఆమోదాలు", stocks: "Sun Pharma, Dr Reddy's, Cipla, Lupin", reason: "డిఫెన్సివ్ కొనుగోళ్లు మరియు హెల్త్‌కేర్ ఎగుమతుల డిమాండ్", str: "బలమైనది", status: "Strong", src: "NSE" },
+    { name: "NIFTY FMCG", chg: "-0.30%", news: "ముడిసరుకు ఖర్చులు పెరగడంతో మార్జిన్లపై భారం", stocks: "ITC, HUL, Dabur, Marico, Nestle", reason: "గ్రామీణ రికవరీ నెమ్మదిగా సాగడం, పామాయిల్ ధరల పెరుగుదల", str: "తటస్థం", status: "Deteriorating", src: "NSE" },
+    { name: "NIFTY Metal", chg: "+0.60%", news: "చైనా ఆర్థిక ఉద్దీపన ప్యాకేజీలు, ఉత్పత్తి పెరుగుదల", stocks: "Tata Steel, JSW Steel, Hindalco, Vedanta", reason: "గ్లోబల్ లోహ ధరలలో రికవరీ సంకేతాలు, ఇన్ఫ్రా డిమాండ్", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
+    { name: "NIFTY Realty", chg: "-1.40%", news: "వడ్డీ రేట్లు ఎక్కువగా ఉండటం, అధిక ప్రీమియం వాల్యుయేషన్లు", stocks: "DLF, Godrej Prop, Oberoi Realty, Macrotech", reason: "లాభాల స్వీకరణ మరియు కొనుగోలుదార్ల ఆచితూచి ధోరణి", str: "తీవ్ర బలహీనం", status: "Weak", src: "NSE" },
+    { name: "NIFTY Energy / Oil & Gas", chg: "+0.20%", news: "గ్రీన్ ఎనర్జీ ప్రాజెక్టులు మరియు పవర్ పీక్ డిమాండ్", stocks: "Reliance, NTPC, Power Grid, ONGC, BPCL", reason: "పునరుత్పాదక ఇంధన విస్తరణ ఆర్డర్లు & గ్రిడ్ ఇన్వెస్ట్‌మెంట్", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
+    { name: "NIFTY Infrastructure", chg: "+0.35%", news: "కేంద్ర బడ్జెట్ కాపెక్స్ వ్యయాలు మరియు నేషనల్ హైవేస్ టెండర్లు", stocks: "L&T, Adani Ports, IRB Infra, UltraTech", reason: "ఆర్డర్ బుక్ పటిష్టత, దేశీయ మూలధన వ్యయాల ఊపు", str: "మధ్యస్థం", status: "Stable", src: "NSE" },
+    { name: "NIFTY PSU Bank", chg: "-0.50%", news: "డిపాజిట్ మొబిలైజేషన్ వ్యయాలు పెరగడం", stocks: "SBIN, Bank of Baroda, PNB, Canara Bank", reason: "రైట్-ఆఫ్స్ తక్కువగా ఉన్నప్పటికీ ట్రెజరీ లాభాలు మందగించడం", str: "తటస్థం", status: "Neutral", src: "NSE" },
+    { name: "NIFTY Financial Services", chg: "-0.65%", news: "అన్‌సెక్యూర్డ్ రుణాలపై RBI నిబంధనల కఠినతరం", stocks: "Bajaj Finance, HDFC Life, Shriram Finance", reason: "రిస్క్ వెయిటేజీ పెంపుతో రుణ వృద్ధి రేటులో జాగ్రత్త", str: "బలహీనం", status: "Deteriorating", src: "NSE" },
+    { name: "NIFTY Consumer Durables", chg: "+0.40%", news: "పండుగల సీజన్ ఎలక్ట్రానిక్స్ & ఉపకరణాల డిమాండ్", stocks: "Havells, Voltas, Dixon Tech, Titan", reason: "ప్రీమియమైజేషన్ మరియు రీటైల్ స్టోర్ ఫుట్‌ఫాల్స్ వృద్ధి", str: "మధ్యస్థం", status: "Improving", src: "NSE" },
+    { name: "NIFTY Chemicals & Fertilizers", chg: "+0.15%", news: "స్పెషాలిటీ కెమికల్స్ డి-స్టాకింగ్ ముగింపు సంకేతాలు", stocks: "PI Industries, SRF, Aarti Ind, Coromandel", reason: "రబీ సీజన్ ఎరువుల డిమాండ్ మరియు అంతర్జాతీయ ధరల స్థిరత్వం", str: "తటస్థం", status: "Stable", src: "NSE" },
   ];
 
   return head("Sector Dashboard (రంగాల పనితీరు)", "NSE కీలక రంగాల సూచీలు, బలమైన/బలహీనమైన రంగాలు, ప్రధాన కారణాలు మరియు ప్రభావిత స్టాక్స్.") +
