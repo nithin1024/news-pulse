@@ -1,0 +1,77 @@
+[
+{
+"id": "a40211c77758",
+"key": "https://economictimes.indiatimes.com/news/company/corporate-trends/it-sector-faces-another-muted-quarter-as-pricing-pressure-geopolitics-weigh-on-growth-report/articleshow/134669163.cms",
+"source": "et_corporate",
+"source_name": "Economic Times Corporate Announcements",
+"src_category": "earnings",
+"weight": 4,
+"kind": "article",
+"url": "https://economictimes.indiatimes.com/news/company/corporate-trends/it-sector-faces-another-muted-quarter-as-pricing-pressure-geopolitics-weigh-on-growth-report/articleshow/134669163.cms",
+"title": "IT sector faces another muted quarter as pricing pressure, geopolitics weigh on growth: Report",
+"published": "2026-10-04T03:20:23Z",
+"fetched": "2026-10-10T13:28:03Z",
+"excerpt": "India's IT sector is expected to see limited growth in Q2FY27 due to various pressures and headwinds. Predictions indicate large-cap firms might experience a modest revenue increase, while mid-cap companies could outperform. Although margins might improve slightly, profitability could continue facing challenges from investment needs. The Nifty IT index has dropped significantly, reaching multi-year lows due to weak demand.",
+"meta": {},
+"ai": {
+"title_te": "IT రంగం Q2FY27లో మితమైన వృద్ధి, ధర ఒత్తిడి, భౌగోళిక రాజకీయాలు ప్రభావం",
+"summary": "భారత IT రంగం Q2FY27లో ధర ఒత్తిడి, భౌగోళిక రాజకీయాల కారణంగా మితమైన వృద్ధి చూపనుంది. పెద్ద-క్యాప్ సంస్థల ఆదాయంలో స్వల్ప పెరుగుదల, మధ్య-క్యాప్ సంస్థలు మెరుగ్గా ప్రదర్శించవచ్చు.",
+"summary_te": "భారత IT రంగం Q2FY27లో ధర ఒత్తిడి, భౌగోళిక రాజకీయాల కారణంగా మితమైన వృద్ధి చూపనుంది. పెద్ద-క్యాప్ సంస్థల ఆదాయంలో స్వల్ప పెరుగుదల, మధ్య-క్యాప్ సంస్థలు మెరుగ్గా ప్రదర్శించవచ్చు.",
+"why": "ఇన్వెస్టర్లకు IT రంగంలో పెట్టుబడి నిర్ణయాలు తీసుకోవడంలో కీలకమైన సమాచారం.",
+"why_it_matters_te": "ఇన్వెస్టర్లకు IT రంగంలో పెట్టుబడి నిర్ణయాలు తీసుకోవడంలో కీలకమైన సమాచారం.",
+"category": "earnings",
+"sentiment": "negative",
+"sentiment_label_te": "ప్రతికూలం",
+"importance": 4,
+"news_strength": "Moderate",
+"intraday_action": "WATCH",
+"impact_horizon": "short-term",
+"confidence": "medium",
+"tags": [],
+"affected_stocks": [
+"TCS",
+"INFY",
+"WIPRO",
+"HCLTECH"
+],
+"affected_sectors": [
+"IT"
+],
+"market_impact_te": "NIFTY IT సూచీ మల్టీ-యియర్ లోస్‌కు చేరి, IT రంగంలో పెట్టుబడిదారులు జాగ్రత్తగా ఉండాలి. ధర ఒత్తిడి కారణంగా లాభదాయకత తగ్గిపోవచ్చు."
+}
+},
+{
+"id": "3e04540a9702",
+"key": "https://cnbc.com/2026/10/04/gen-z-sports-betting-financial-and-mental-health-risks.html",
+"source": "cnbc_markets",
+"source_name": "CNBC US & Global Markets",
+"src_category": "global_markets",
+"weight": 4,
+"kind": "article",
+"url": "https://www.cnbc.com/2026/10/04/gen-z-sports-betting-financial-and-mental-health-risks.html",
+"title": "Sports betting is increasingly the norm for Gen Z. Here’s why some financial and mental health experts are worried",
+"published": "2026-10-04T12:57:45Z",
+"fetched": "2026-10-10T13:28:03Z",
+"excerpt": "Surveys show Gen Z increasingly views sports bets as a form of investment, and those who gamble too often face mental health risks.",
+"meta": {},
+"ai": {
+"title_te": "జెన్ Zలో స్పోర్ట్స్ బెట్టింగ్ పెరుగుదల",
+"summary": "సర్వేలు చూపిస్తున్నాయి జెన్ Z స్పోర్ట్స్ బెట్టింగ్‌ను పెట్టుబడిగా చూస్తున్నారు, ఇది మానసిక ఆరోగ్యంపై ప్రభావం చూపుతుంది.",
+"summary_te": "సర్వేలు చూపిస్తున్నాయి జెన్ Z స్పోర్ట్స్ బెట్టింగ్‌ను పెట్టుబడిగా చూస్తున్నారు, ఇది మానసిక ఆరోగ్యంపై ప్రభావం చూపుతుంది.",
+"why": "ఇది వినియోగదారుల ప్రవర్తనలో మార్పును సూచిస్తుంది, కానీ స్టాక్ మార్కెట్‌పై ప్రత్యక్ష ప్రభావం లేదు.",
+"why_it_matters_te": "ఇది వినియోగదారుల ప్రవర్తనలో మార్పును సూచిస్తుంది, కానీ స్టాక్ మార్కెట్‌పై ప్రత్యక్ష ప్రభావం లేదు.",
+"category": "other",
+"sentiment": "neutral",
+"sentiment_label_te": "తటస్థం",
+"importance": 1,
+"news_strength": "Weak",
+"intraday_action": "AVOID NEWS-ONLY TRADE",
+"impact_horizon": "short-term",
+"confidence": "medium",
+"tags": [],
+"affected_stocks": [],
+"affected_sectors": [],
+"market_impact_te": "వినియోగదారుల ప్రవర్తనలో మార్పు మాత్రమే."
+}
+}
+]
