@@ -1,0 +1,42 @@
+[
+{
+"id": "85d24910e944",
+"key": "https://cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
+"source": "cnbc_economy",
+"source_name": "CNBC Economy & Central Banks",
+"src_category": "economy",
+"weight": 4,
+"kind": "article",
+"url": "https://www.cnbc.com/2026/09/18/japan-rate-hike-stocks-rise-bond-yields-yen-fall.html",
+"title": "Why Japan’s markets flipped the usual script after central bank rate hike",
+"published": "2026-09-21T01:02:25Z",
+"fetched": "2026-10-10T13:28:03Z",
+"excerpt": "The yen weakened past 157 against the dollar, the yield on the 10-year Japanese Government Bond slipped, while the Nikkei 225 gained 1.5%.",
+"meta": {},
+"ai": {
+"title_te": "జపాన్ కేంద్ర బ్యాంకు రేటు పెంపు తర్వాత మార్కెట్లు సాధారణ స్క్రిప్ట్‌ను తలకిందులు చేశాయి",
+"summary": "జపాన్ కేంద్ర బ్యాంకు వడ్డీ రేటు పెంచిన తర్వాత, యెన్ డాలర్‌కు 157కి దిగిపోయి, 10-సంవత్సర జపాన్ ప్రభుత్వ బాండ్ యీల్డ్ తగ్గి, నిక్కై 225 1.5% పెరిగింది.",
+"summary_te": "జపాన్ కేంద్ర బ్యాంకు వడ్డీ రేటు పెంచిన తర్వాత, యెన్ డాలర్‌కు 157కి దిగిపోయి, 10-సంవత్సర జపాన్ ప్రభుత్వ బాండ్ యీల్డ్ తగ్గి, నిక్కై 225 1.5% పెరిగింది.",
+"why": "ఇది భారతీయ మార్కెట్లలో విదేశీ మారకపు ప్రవాహాలు, బాండ్ యీల్డ్, మరియు ఎగుమతి ఆధారిత కంపెనీల లాభదాయకతపై ప్రభావం చూపుతుంది.",
+"why_it_matters_te": "ఇది భారతీయ మార్కెట్లలో విదేశీ మారకపు ప్రవాహాలు, బాండ్ యీల్డ్, మరియు ఎగుమతి ఆధారిత కంపెనీల లాభదాయకతపై ప్రభావం చూపుతుంది.",
+"category": "global_markets",
+"sentiment": "neutral",
+"sentiment_label_te": "తటస్థం",
+"importance": 4,
+"news_strength": "Strong",
+"intraday_action": "WATCH",
+"impact_horizon": "short-term",
+"confidence": "medium",
+"tags": [],
+"affected_stocks": [
+"NIFTY 50"
+],
+"affected_sectors": [
+"Financials",
+"IT",
+"Automobile"
+],
+"market_impact_te": "యెన్ బలహీనత భారతీయ ఎగుమతిదారులకు లాభదాయకంగా ఉండవచ్చు, కానీ జపాన్ బాండ్ యీల్డ్ తగ్గడం గ్లోబల్ బాండ్ మార్కెట్లలో వడ్డీ రేటు అంచనాలను మార్చి, భారతీయ బాండ్ మార్కెట్‌లో వడ్డీ రేటు ఒత్తిడిని పెంచుతుంది."
+}
+}
+]
