@@ -1,0 +1,36 @@
+[
+{
+"id": "7b451c2f5000",
+"key": "https://cnbc.com/2026/09/20/france-wine-production-70-year-low-heatwaves-drought.html",
+"source": "cnbc_economy",
+"source_name": "CNBC Economy & Central Banks",
+"src_category": "economy",
+"weight": 4,
+"kind": "article",
+"url": "https://www.cnbc.com/2026/09/20/france-wine-production-70-year-low-heatwaves-drought.html",
+"title": "France’s wine production nears a 70-year low, leaving winemakers with tough choices",
+"published": "2026-09-20T05:00:01Z",
+"fetched": "2026-10-10T13:28:03Z",
+"excerpt": "As the French wine industry reaches a crisis point, key players are considering new markets, products and generations.",
+"meta": {},
+"ai": {
+"title_te": "ఫ్రాన్స్ వైన్ ఉత్పత్తి 70 సంవత్సరాల్లో కనిష్ట స్థాయికి చేరింది",
+"summary": "ఫ్రాన్స్‌లో వైన్ ఉత్పత్తి చరిత్రలో కనిష్ట స్థాయికి చేరి, ఉత్పత్తిదారులు కొత్త మార్కెట్లు, ఉత్పత్తులు, తరాలు అన్వేషిస్తున్నారు.",
+"summary_te": "ఫ్రాన్స్‌లో వైన్ ఉత్పత్తి చరిత్రలో కనిష్ట స్థాయికి చేరి, ఉత్పత్తిదారులు కొత్త మార్కెట్లు, ఉత్పత్తులు, తరాలు అన్వేషిస్తున్నారు.",
+"why": "వైన్ దిగుమతి ఖర్చు పెరిగితే, భారతీయ వైన్ దిగుమతి సంస్థలు, హాస్పిటాలిటీ రంగంపై ప్రభావం చూపవచ్చు.",
+"why_it_matters_te": "వైన్ దిగుమతి ఖర్చు పెరిగితే, భారతీయ వైన్ దిగుమతి సంస్థలు, హాస్పిటాలిటీ రంగంపై ప్రభావం చూపవచ్చు.",
+"category": "other",
+"sentiment": "neutral",
+"sentiment_label_te": "తటస్థం",
+"importance": 1,
+"news_strength": "Weak",
+"intraday_action": "AVOID NEWS-ONLY TRADE",
+"impact_horizon": "short-term",
+"confidence": "medium",
+"tags": [],
+"affected_stocks": [],
+"affected_sectors": [],
+"market_impact_te": "భారతీయ మార్కెట్‌కు ప్రత్యక్ష ప్రభావం తక్కువ, కాబట్టి ట్రేడింగ్ నిర్ణయాల్లో పరిగణనలోకి తీసుకోవద్దు."
+}
+}
+]
